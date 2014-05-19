@@ -1,0 +1,24 @@
+body{
+	font-family: 'Handlee', 'FontAwesome', cursive;
+}
+
+.container{
+	width :500px;
+	margin:0 auto;
+}
+
+input{
+	padding:10px;
+	border-radius:5px;
+	box-shadow: 3px 3px 3px #ddd inset;
+	border:0;
+	width:500px;
+	font-family: 'Handlee', 'FontAwesome', cursive;
+	height:50px;
+	font-size:36px;
+}
+
+.votes i{
+	font-style:normal;
+	padding:3px;
+}

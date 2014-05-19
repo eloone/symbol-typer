@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The typing symbol hack</title>
+<link href='http://fonts.googleapis.com/css?family=Handlee' rel='stylesheet' type='text/css'>
+<link href="css/font-awesome.css" rel="stylesheet"/>
+<link href="css/main.css" rel="stylesheet"/>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+<script type="text/javascript" src="caret.js"></script> 
+<script type="text/javascript" src="symbolTyper.js"></script> 
+<script type="text/javascript" src="main.js"></script> 
+</head>
+<body>
+	<input value="" id="input" class="input" type="text" placeholder="Type: Hello *** +++"/>
+	<input value="" id="input1" class="input" type="text" placeholder="test"/>
+	<div id="inputDiv" class="input" contenteditable="true">ajskldjklsajd<br>lkjsdjs</div>
+	<textarea id="textarea">&#xf0e7; </textarea>
+	<div class="count">
+		<p>Bolts : <span id="boltsCount">0</span></p>
+		<p>Hearts : <span id="heartsCount">0</span></p>
+		<p>You typed : <span id="rawText"></span></p>
+	</div>
+</body>
+</html>

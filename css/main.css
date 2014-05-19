@@ -1,0 +1,33 @@
+body{
+	font-family: 'Handlee', 'FontAwesome', cursive;
+}
+
+input, textarea{
+	padding:10px;
+	border-radius:5px;
+	box-shadow: 3px 3px 3px #ddd inset;
+	border:0;
+	width:500px;
+	font-family: 'Handlee', 'FontAwesome', cursive;
+	height:50px;
+	font-size:36px;
+}
+
+div.input{
+	height:200px;
+}
+
+.count{
+	margin-top:15px;
+}
+
+.count p{
+	padding: 0;
+	margin: 0;
+}
+
+.input{
+	width:200px;
+	height:40px;
+	border:1px solid black;
+}
