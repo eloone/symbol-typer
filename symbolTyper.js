@@ -27,7 +27,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 			throw new Error('symbolTyper takes an HTML Element or a collection of HTML Elements as argument');
 		}
 
-		initSymbols();
+		initSymbols(HTMLElt);
 
 		if(HTMLElt.addEventListener){
 			HTMLElt.addEventListener('keyup', onKeyup);
@@ -45,7 +45,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 		
 	}
 
-	function initSymbols(){
+	function initSymbols(target){
 
 		if(typeof typer.symbols == 'undefined'){
 			throw new Error('The 2nd argument in symbolTyper is missing. \n It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}');
@@ -57,7 +57,13 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 			//power hack to insert a unicode as html entity in an input via javascript
 			symbol.htmlSymbol = convertToHtml(symbol.unicode);
 
+			if(isContentEditable(target)){
+				symbol.htmlSymbol = convertToHtml(symbol.unicode).replace(/^\s+|\s+$/g, '&nbsp;');
+			}
+
 			symbol.encoded = encodeURIComponent(htmlTrim(symbol.htmlSymbol));
+
+			symbol.encodedWithPadding = encodeURIComponent(symbol.htmlSymbol);
 
 			symbol.convertedUnicode = convertToText(symbol.unicode);
 
@@ -124,7 +130,7 @@ var caret = new Caret(targetElt);
 				
 				if(symbol.matched){
 					console.log('matched');
-					diffChar = symbol.convertedUnicode.length - symbol.replacedMatched.length;
+					diffChar = symbol.convertedUnicode.length - symbol.typed.length
 					console.log('diffChar', diffChar);
 					console.log(symbol.replaced);
 					this.setValue(newText);
@@ -166,10 +172,10 @@ var caret = new Caret(targetElt);
 
 			var replacedMatched = regexp.exec(newText);
 
-			symbol.replacedMatched = '';
+			symbol.typed = '';
 
 			if(replacedMatched){
-				symbol.replacedMatched = convertToText(replacedMatched[2]);
+				symbol.typed = convertToText(replacedMatched[2]);
 			}
 
 			symbol.matched = false;
@@ -189,10 +195,17 @@ var caret = new Caret(targetElt);
 			}else{
 				symbol.matched = regexp.test(newText);
 				newText = newText.replace(regexp, '$1'+symbol.htmlSymbol);
-				
 			}
 
 			return newText;
+		};
+
+		this.getDisplayedSymbol = function(symbol){
+			if(this.isContentEditable()){
+				return symbol.htmlContentEditable;
+			}
+
+			return symbol.htmlSymbol;
 		};
 
 		this.getSymbolCount = function(symbol, txt){			
@@ -217,17 +230,18 @@ var caret = new Caret(targetElt);
 
 			for(var key in typer.symbols){
 				var symbol = typer.symbols[key];
-				var pattern = '('+symbol.encoded+')+';
+				var symbolPattern = '('+symbol.encoded+')|('+symbol.encodedWithPadding+')';
 				var escapedPattern = '(\\\\)('+this.getSymbolPattern(symbol.replaced)+')';
-				var regexp = new RegExp(escapedPattern, 'g');
+				var regexpEscaped = new RegExp(escapedPattern, 'g');
+				var regexpSymbol = new RegExp(symbolPattern, 'g');
 
 				res.count[key] = getCountChar(symbol.encoded, rawEncodedHtml);
 				
-				rawEncodedHtml = rawEncodedHtml.replace(new RegExp(pattern, 'g'), '');
+				rawEncodedHtml = rawEncodedHtml.replace(regexpSymbol, '');
 
-				resText = decodeURIComponent(rawEncodedHtml).trim();
+				resText = htmlTrim(decodeURIComponent(rawEncodedHtml));
 
-				resText = resText.replace(regexp, '$2');
+				resText = resText.replace(regexpEscaped, '$2');
 
 				rawEncodedHtml = encodeURIComponent(resText);
 			}
@@ -270,6 +284,14 @@ console.log(caretPos.value);
 		
 		
 	}
+
+	function isContentEditable(HTMLElt){
+		if(HTMLElt.tagName == 'INPUT' || HTMLElt.tagName == 'TEXTAREA'){
+			return false;
+		}
+		
+		return true;
+	};
 
 	function getCountChar(char, inStr){
 		if(typeof char.push == 'function'){

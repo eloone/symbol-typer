@@ -9,7 +9,7 @@
 
    var symbols = {
         bolts : {
-            unicode : ' &#xf0e7;',
+            unicode : ' &#xf0e7; ',
             replaced : [':-)', ':)', '*', 'test'],
             limit : 5
         },
