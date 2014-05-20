@@ -124,7 +124,7 @@ var caret = new Caret(targetElt);
 				
 				if(symbol.matched){
 					console.log('matched');
-					diffChar = symbol.convertedUnicode.length - symbol.replaced.length;
+					diffChar = symbol.convertedUnicode.length - symbol.replacedMatched.length;
 					console.log('diffChar', diffChar);
 					console.log(symbol.replaced);
 					this.setValue(newText);
@@ -159,10 +159,18 @@ var caret = new Caret(targetElt);
 
 		this.insertSymbol = function insertSymbol(text, symbol){
 			var newText = text;
-
-			var pattern = '([^\\\\]|^)'+this.getSymbolPattern(symbol.replaced);
+		
+			var pattern = '([^\\\\]|^)'+'('+this.getSymbolPattern(symbol.replaced)+')';
 
 			var regexp = new RegExp(pattern);
+
+			var replacedMatched = regexp.exec(newText);
+
+			symbol.replacedMatched = '';
+
+			if(replacedMatched){
+				symbol.replacedMatched = convertToText(replacedMatched[2]);
+			}
 
 			symbol.matched = false;
 
