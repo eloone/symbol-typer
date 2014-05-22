@@ -1,4 +1,14 @@
 function symbolTyper(HTMLElt, symbols, onTyped){
+	if(typeof HTMLElt.length == 'undefined'){
+		new Typer(HTMLElt, symbols, onTyped);
+	}else{
+		for(var i = 0; i < HTMLElt.length; i++){
+			new Typer(HTMLElt[i], symbols, onTyped);
+		}
+	}
+}
+
+function Typer(HTMLElt, symbols, onTyped){
 	var typer = this;
 	var filterKeyDown = false;
 	var tmp = document.createElement('p');
@@ -7,7 +17,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 	var IE = false;
 	var target;
 
-	typer.symbols = symbols;
+	typer.symbols = clone(symbols);
 
 	typer.onTyped = onTyped;
 	
@@ -57,16 +67,38 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 			//power hack to insert a unicode as html entity in an input via javascript
 			symbol.htmlSymbol = convertToHtml(symbol.unicode);
 
-			if(isContentEditable(target)){
-				symbol.htmlSymbol = convertToHtml(symbol.unicode).replace(/^\s+|\s+$/g, '&nbsp;');
-			}
-
 			symbol.encoded = encodeURIComponent(htmlTrim(symbol.htmlSymbol));
 
 			symbol.encodedWithPadding = encodeURIComponent(symbol.htmlSymbol);
 
 			symbol.convertedUnicode = convertToText(symbol.unicode);
 
+
+			if(!symbol.before){
+				symbol.before = '';
+			}else{
+				if(isContentEditable(target)){
+					symbol.before = symbol.before.replace(/^\s+|\s+$/g, '&nbsp;');
+				}
+			}			
+
+			if(!symbol.after){
+				symbol.after = '';
+			}else{
+				if(isContentEditable(target)){
+					symbol.after = symbol.after.replace(/^\s+|\s+$/g, '&nbsp;');
+				}
+			}
+
+			if(isContentEditable(target)){
+				if(symbol.replaced.push){
+					symbol.replaced.push('9');
+				}
+			}
+
+			symbol.inserted = symbol.before+symbol.htmlSymbol+symbol.after;
+
+			symbol.target = target;
 		}
 
 	}
@@ -94,9 +126,9 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 		
 		var targetElt = IE ? event.srcElement : event.target;
 	
-		//if(!(target instanceof Target)){
+		if(!(target instanceof Target)){
 			target = new Target(targetElt);
-		//}
+		}
 
 var caret = new Caret(targetElt);
 
@@ -109,7 +141,7 @@ var caret = new Caret(targetElt);
 	   	if(typeof typer.onTyped == 'function'){
 	   		var result = target.getStatus();
 
-	   		typer.onTyped(result);
+	   		typer.onTyped(result, event);
 	   	}
 	}
 	
@@ -122,7 +154,7 @@ var caret = new Caret(targetElt);
 
 		this.insertSymbols = function insertSymbols(){
 			var newText = this.getValue();
-
+console.log(typer.symbols);
 			for(var key in typer.symbols){
 				var symbol = typer.symbols[key];
 
@@ -177,7 +209,7 @@ var caret = new Caret(targetElt);
 			if(replacedMatched){
 				symbol.typed = convertToText(replacedMatched[2]);
 			}
-
+console.log('symbol', symbol);
 			symbol.matched = false;
 
 			//replace replaced with symbol
@@ -187,14 +219,14 @@ var caret = new Caret(targetElt);
 				//if unescaped replaced chars are present but not replaced by their symbol
 				//they will be replaced by their symbol until limit is reached
 				while(count.unreplacedCount > 0 && count.symbolCount < symbol.limit){
-					newText = newText.replace(regexp, '$1'+symbol.htmlSymbol);
+					newText = newText.replace(regexp, '$1'+symbol.inserted);
 					count = this.getSymbolCount(symbol, newText);
 					symbol.matched = true;					
 				}
 				
 			}else{
 				symbol.matched = regexp.test(newText);
-				newText = newText.replace(regexp, '$1'+symbol.htmlSymbol);
+				newText = newText.replace(regexp, '$1'+symbol.inserted);
 			}
 
 			return newText;
@@ -327,6 +359,35 @@ console.log(caretPos.value);
 
 	function htmlTrim(text){
 		return text.replace(/^\s+|\s+$|&nbsp;/g, '');
+	}
+
+	function clone(obj){
+		var newObj = {};
+		var notObj = true;
+
+		for(var k in obj){
+			newObj[k] = {};
+
+			for(var i in obj[k]){
+				if(typeof obj[k][i] != 'undefined'){
+					notObj = false;
+					if(typeof obj[k][i].slice == 'function'){
+						newObj[k][i] = obj[k][i].slice(0);
+					}else{
+						newObj[k][i] = obj[k][i];
+					}
+					
+				}
+			}
+
+			if(notObj){
+				newObj[k] = obj[k];
+			}
+
+		}
+
+		return newObj;
+
 	}
 	
 }
