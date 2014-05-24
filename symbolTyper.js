@@ -1,394 +1,620 @@
-function symbolTyper(HTMLElt, symbols, onTyped){
-	if(typeof HTMLElt.length == 'undefined'){
-		new Typer(HTMLElt, symbols, onTyped);
-	}else{
-		for(var i = 0; i < HTMLElt.length; i++){
-			new Typer(HTMLElt[i], symbols, onTyped);
-		}
+/* symbolTyper - v0.1.0 - 2014-05-24 */
+(function(window){
+/* src/utils.js begins : */
+var tmp = document.createElement('p');
+var input = document.createElement('input');
+var utils = {
+
+checkHtmlElt : function checkHtmlElt(HTMLElt, i){
+	if( !HTMLElt || HTMLElt.nodeType !== 1){
+		throw new Error('symbolTyper : Input '+i+' is not an HTML Element');
 	}
+},
+
+isContentEditable : function isContentEditable(HTMLElt){
+	if(HTMLElt.tagName == 'INPUT' || HTMLElt.tagName == 'TEXTAREA'){
+		return false;
+	}
+	
+	return true;
+},
+
+getCountChar : function getCountChar(char, inStr){
+	if(typeof char.push == 'function'){
+		var count = 0;
+
+		for(var i = 0; i < char.length; i++){
+			count += getCountChar(char[i], inStr);
+		}
+
+		return count;
+	}
+
+		return (inStr.split(char).length - 1);
+},
+
+convertToHtml : function convertToHtml(text){
+	tmp.innerHTML = text;
+	return tmp.innerHTML;
+},
+
+convertToText : function convertToText(html){
+	tmp.innerHTML = html;
+	return tmp.textContent;
+},
+
+IEFix : function IEFix(){
+	if(typeof String.prototype.trim !== 'function') {
+	  String.prototype.trim = function() {
+	    return this.replace(/^\s+|\s+$/g, ''); 
+	  }
+	}
+},
+
+htmlTrim : function htmlTrim(text){
+	return text.replace(/^\s+|\s+$|&nbsp;/g, '');
+},
+
+clone : function clone(obj){
+	var newObj = {};
+	var notObj = true;
+
+	for(var k in obj){
+		newObj[k] = {};
+
+		for(var i in obj[k]){
+			if(typeof obj[k][i] != 'undefined'){
+				notObj = false;
+				if(typeof obj[k][i].slice == 'function'){
+					newObj[k][i] = obj[k][i].slice(0);
+				}else{
+					newObj[k][i] = obj[k][i];
+				}
+				
+			}
+		}
+
+		if(notObj){
+			newObj[k] = obj[k];
+		}
+
+	}
+
+	return newObj;
+
 }
 
-function Typer(HTMLElt, symbols, onTyped){
-	var typer = this;
-	var filterKeyDown = false;
-	var tmp = document.createElement('p');
-	var input = document.createElement('input');
-	var originalText = '';
-	var IE = false;
-	var target;
+};
+/* src/utils.js ends. */
 
-	typer.symbols = clone(symbols);
+/* src/symbol.js begins : */
+function Symbol(symbol, target){
 
-	typer.onTyped = onTyped;
-	
-	IEFix();
-	
-	if(typeof HTMLElt.length == 'undefined'){
-		enableSymbols(HTMLElt);
+	//power hack to insert a unicode as html entity in an input via javascript
+	symbol.htmlSymbol = utils.convertToHtml(symbol.unicode);
+
+	symbol.encoded = encodeURIComponent(utils.htmlTrim(symbol.htmlSymbol));
+
+	symbol.convertedUnicode = utils.convertToText(symbol.unicode);
+
+	symbol.pattern = this.getPattern(symbol.replaced, target);
+
+	if(!symbol.before){
+		symbol.before = '';
 	}else{
-		for(var i = 0; i < HTMLElt.length; i++){
-			enableSymbols(HTMLElt[i]);
+		if(utils.isContentEditable(target)){
+			symbol.before = symbol.before.replace(/^\s+|\s+$/g, '&nbsp;');
+		}
+	}			
+
+	if(!symbol.after){
+		symbol.after = '';
+	}else{
+		if(utils.isContentEditable(target)){
+			symbol.after = symbol.after.replace(/^\s+|\s+$/g, '&nbsp;');
 		}
 	}
 
-	function enableSymbols(HTMLElt){
+	symbol.inserted = symbol.before+symbol.htmlSymbol+symbol.after;
 
-		if( HTMLElt.nodeType !== 1){
-			throw new Error('symbolTyper takes an HTML Element or a collection of HTML Elements as argument');
-		}
+	symbol.textInserted = utils.convertToText(symbol.inserted);
 
-		initSymbols(HTMLElt);
+	return symbol;
+}
 
-		if(HTMLElt.addEventListener){
-			HTMLElt.addEventListener('keyup', onKeyup);
+Symbol.prototype = {
+	getPattern : function getPattern(symbolReplaced, target){
 
-			HTMLElt.addEventListener('keydown', onKeydown);
-		}
-		
-		if(HTMLElt.attachEvent){
-			IE = true;
-			
-			HTMLElt.attachEvent('onkeyup', onKeyup);
+		var specialCharRegex = /[-[\]{}()*+?.,\\^$#\s]/g;
 
-			HTMLElt.attachEvent('onkeydown', onKeydown);
-		}
-		
-	}
+		if(typeof symbolReplaced.push == 'function'){
+			var pattern = [];
 
-	function initSymbols(target){
-
-		if(typeof typer.symbols == 'undefined'){
-			throw new Error('The 2nd argument in symbolTyper is missing. \n It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}');
-		}
-
-		for(var i in typer.symbols){
-			var symbol = typer.symbols[i];
-
-			//power hack to insert a unicode as html entity in an input via javascript
-			symbol.htmlSymbol = convertToHtml(symbol.unicode);
-
-			symbol.encoded = encodeURIComponent(htmlTrim(symbol.htmlSymbol));
-
-			symbol.encodedWithPadding = encodeURIComponent(symbol.htmlSymbol);
-
-			symbol.convertedUnicode = convertToText(symbol.unicode);
-
-
-			if(!symbol.before){
-				symbol.before = '';
-			}else{
-				if(isContentEditable(target)){
-					symbol.before = symbol.before.replace(/^\s+|\s+$/g, '&nbsp;');
-				}
-			}			
-
-			if(!symbol.after){
-				symbol.after = '';
-			}else{
-				if(isContentEditable(target)){
-					symbol.after = symbol.after.replace(/^\s+|\s+$/g, '&nbsp;');
-				}
+			for(var i = 0; i < symbolReplaced.length; i++){
+				var symbolPattern = symbolReplaced[i];
+				pattern.push(symbolPattern.replace(specialCharRegex, '\\$&'));
 			}
 
-			if(isContentEditable(target)){
-				if(symbol.replaced.push){
-					symbol.replaced.push('9');
-				}
-			}
-
-			symbol.inserted = symbol.before+symbol.htmlSymbol+symbol.after;
-
-			symbol.target = target;
+			pattern = '('+pattern.join('|')+')';
+		}else{
+			var pattern = symbolReplaced.replace(specialCharRegex, '\\$&');
 		}
 
-	}
-
-	function onKeydown(event){
-		//enter/left/right
-        var forbidden = [13, 39, 37];
-        var forbiddenKey = false;
-        
-        for(var i = 0; i < forbidden.length; i++){
-        	if(forbidden[i] == event.keyCode){
-        		forbiddenKey = true;
-        		break;
-        	}
-        }
-
-		filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
-	}
-
-	function onKeyup(event){
-
-		if(filterKeyDown){
-			return;
+		if(utils.isContentEditable(target)){
+			pattern = utils.convertToHtml(pattern);
 		}
-		
-		var targetElt = IE ? event.srcElement : event.target;
+
+		return pattern;
+	}
+};
+/* src/symbol.js ends. */
+
+/* src/caret.js begins : */
+(function(window){
+
+	var html5;
+	var ie;
+
+	var test;
 	
-		if(!(target instanceof Target)){
-			target = new Target(targetElt);
-		}
-
-var caret = new Caret(targetElt);
-
-//console.log(caret.getPosition());
-
-		target.event = event;
-
-		target.insertSymbols();
-
-	   	if(typeof typer.onTyped == 'function'){
-	   		var result = target.getStatus();
-
-	   		typer.onTyped(result, event);
-	   	}
+	if(window.addEventListener){
+		window.addEventListener('load', init);
 	}
 	
-
-	function Target(elt){
-		var HTMLElt = elt;
-		var caret = new Caret(elt);
-		var previousValue;
-		var diffChar;
-
-		this.insertSymbols = function insertSymbols(){
-			var newText = this.getValue();
-console.log(typer.symbols);
-			for(var key in typer.symbols){
-				var symbol = typer.symbols[key];
-
-				newText = this.insertSymbol(newText, symbol);
-				
-				if(symbol.matched){
-					console.log('matched');
-					diffChar = symbol.convertedUnicode.length - symbol.typed.length
-					console.log('diffChar', diffChar);
-					console.log(symbol.replaced);
-					this.setValue(newText);
-				}
-			}
-
-		};
-
-		this.getSymbolPattern = function getSymbolPattern(symbolReplaced){
-			
-			var specialCharRegex = /[-[\]{}()*+?.,\\^$#\s]/g;
-
-			if(typeof symbolReplaced.push == 'function'){
-				var pattern = [];
-
-				for(var i = 0; i < symbolReplaced.length; i++){
-					var symbolPattern = symbolReplaced[i];
-					pattern.push(symbolPattern.replace(specialCharRegex, '\\$&'));
-				}
-
-				pattern = '('+pattern.join('|')+')';
-			}else{
-				var pattern = symbolReplaced.replace(specialCharRegex, '\\$&');
-			}
-
-			if(this.isContentEditable()){
-				pattern = convertToHtml(pattern);
-			}
-
-			return pattern;
-		};
-
-		this.insertSymbol = function insertSymbol(text, symbol){
-			var newText = text;
-		
-			var pattern = '([^\\\\]|^)'+'('+this.getSymbolPattern(symbol.replaced)+')';
-
-			var regexp = new RegExp(pattern);
-
-			var replacedMatched = regexp.exec(newText);
-
-			symbol.typed = '';
-
-			if(replacedMatched){
-				symbol.typed = convertToText(replacedMatched[2]);
-			}
-console.log('symbol', symbol);
-			symbol.matched = false;
-
-			//replace replaced with symbol
-			if(typeof symbol.limit == 'number'){
-				var count = this.getSymbolCount(symbol);
-
-				//if unescaped replaced chars are present but not replaced by their symbol
-				//they will be replaced by their symbol until limit is reached
-				while(count.unreplacedCount > 0 && count.symbolCount < symbol.limit){
-					newText = newText.replace(regexp, '$1'+symbol.inserted);
-					count = this.getSymbolCount(symbol, newText);
-					symbol.matched = true;					
-				}
-				
-			}else{
-				symbol.matched = regexp.test(newText);
-				newText = newText.replace(regexp, '$1'+symbol.inserted);
-			}
-
-			return newText;
-		};
-
-		this.getDisplayedSymbol = function(symbol){
-			if(this.isContentEditable()){
-				return symbol.htmlContentEditable;
-			}
-
-			return symbol.htmlSymbol;
-		};
-
-		this.getSymbolCount = function(symbol, txt){			
-			var res = {};
-			var text = txt || convertToText(this.getValue());
-			var rawEncodedHtml = encodeURIComponent(text);
-			//get escaped replaced chars to exclude them from unreplaced count
-			var pattern = '\\\\'+this.getSymbolPattern(symbol.replaced);
-			var regexp = new RegExp(pattern, 'g');
-
-			res.symbolCount = getCountChar(symbol.encoded, rawEncodedHtml);
-			res.unreplacedCount = getCountChar(symbol.replaced, text.replace(regexp, ''));
-
-			return res;
-		};
-		
-		this.getStatus = function getStatus(){
-			var text = this.getValue();
-			var res = { count : {}};
-			var rawEncodedHtml = encodeURIComponent(text);
-			var resText = '';
-
-			for(var key in typer.symbols){
-				var symbol = typer.symbols[key];
-				var symbolPattern = '('+symbol.encoded+')|('+symbol.encodedWithPadding+')';
-				var escapedPattern = '(\\\\)('+this.getSymbolPattern(symbol.replaced)+')';
-				var regexpEscaped = new RegExp(escapedPattern, 'g');
-				var regexpSymbol = new RegExp(symbolPattern, 'g');
-
-				res.count[key] = getCountChar(symbol.encoded, rawEncodedHtml);
-				
-				rawEncodedHtml = rawEncodedHtml.replace(regexpSymbol, '');
-
-				resText = htmlTrim(decodeURIComponent(rawEncodedHtml));
-
-				resText = resText.replace(regexpEscaped, '$2');
-
-				rawEncodedHtml = encodeURIComponent(resText);
-			}
-			
-			res.rawText = resText;
-			res.fullText = text;
-			res.originalText = originalText;
-
-			return res;
-		};
-		
-		this.setValue = function setValue(text){
-			var caretPos = caret.getPosition();
-			var pos = caretPos.value + diffChar;
-console.log(caretPos.value);
-			if(this.isContentEditable()){
-				HTMLElt.innerHTML = text;
-			}else{	
-				HTMLElt.value = text;
-			}
-
-			caret.setPosition(pos, caretPos.path);
-		};
-
-		this.getValue = function getValue(){
-			if(this.isContentEditable()){
-				return HTMLElt.innerHTML;
-			}else{
-				return HTMLElt.value;
-			}
-		};
-				
-		this.isContentEditable = function isContentEditable(){
-			if(HTMLElt.tagName == 'INPUT' || HTMLElt.tagName == 'TEXTAREA'){
-				return false;
-			}
-			
-			return true;
-		};
-		
-		
+	if(window.attachEvent){
+		window.attachEvent('load', init);
+	}
+	
+	function init(){
+		html5 = (window.getSelection && document.createRange);//Modern Browsers 
+		ie = (document.selection && document.body.createTextRange);//<IE9
 	}
 
-	function isContentEditable(HTMLElt){
-		if(HTMLElt.tagName == 'INPUT' || HTMLElt.tagName == 'TEXTAREA'){
-			return false;
+	function Caret(target){
+		this.target = target;
+
+		if( target.nodeType != 1){
+			throw new Error('Caret expects an HTML Element as argument in new Caret(HTMLElement)');
 		}
-		
-		return true;
+	
+		this.isContentEditable = (!(target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') && target.getAttribute('contenteditable') === 'true');
+	}
+
+	Caret.prototype = {
+	
+		getPosition : function(){
+			if(this.isContentEditable){
+				return this._getPositionContentEditable();
+			}else{
+				return this._getPositionInputTextArea();
+			}		
+		},
+	
+		setPosition : function(pos, endContainer){
+			if(this.isContentEditable){
+				return this._setPositionContentEditable(pos, endContainer);
+			}else{
+				return this._setPositionInputTextArea(pos, endContainer);
+			}
+		},
+	
+		_getPositionContentEditable : function(){
+			this.target.focus();
+
+			if(html5){
+				var range = window.getSelection().getRangeAt(0);
+
+	          		return {
+	          			value : range.endOffset,
+	          			path : new PositionPath(this.target, range.endContainer),
+	          			container : range.endContainer
+	          		};
+			}
+	
+			if(ie){
+	            var range1 = document.selection.createRange(),
+	                range2 = document.body.createTextRange();
+	            
+	            range2.moveToElementText(range1.parentElement());
+	            range2.setEndPoint('EndToEnd', range1);
+	            
+	            return {
+	            	value : range2.text.length,
+	            	container : range1.parentElement()
+	            };
+			}
+		},
+	
+		_getPositionInputTextArea : function(){
+			this.target.focus();
+			
+			if(html5){
+				return {
+					value : this.target.selectionStart,
+					container : this.target
+				};
+			}
+			
+			if(ie){
+			 var pos = 0,
+	            range = this.target.createTextRange(),
+	            range2 = document.selection.createRange().duplicate(),
+	            bookmark = range2.getBookmark();
+	
+		        range.moveToBookmark(bookmark);
+		        while (range.moveStart('character', -1) !== 0) pos++;
+		        return {
+		        	value : pos,
+		        	container : range.parentElement()
+		        };
+			}
+		},
+	
+		_setPositionContentEditable : function(pos, positionPath){
+			var endContainer;
+
+			if(typeof positionPath == 'undefined'){
+				endContainer = this.target.firstChild;
+			}
+
+			if(positionPath instanceof PositionPath){
+				endContainer = getNodeByPosition(positionPath);
+			}
+
+			if(typeof endContainer == 'undefined' ){
+				if(isChildOf(this.target, positionPath)){
+					endContainer = positionPath;
+				}else{
+					console.warn('Caret.setPosition : Specified end container must be a child of the caret\'s target');
+				}
+			}
+	
+		    if (html5) {
+		       // endContainer.focus();
+		     //   window.getSelection().collapse(endContainer, pos);
+		        var range = document.createRange();//Create a range (a range is a like the selection but invisible)
+		        range.selectNodeContents(this.target);//Select the entire contents of the element with the range
+		        range.setEnd(endContainer, pos);
+		        range.collapse();//collapse the range to the end point. false means collapse to end rather than the start
+		        selection = window.getSelection();//get the selection object (allows you to change selection)
+		        selection.removeAllRanges();//remove any selections already made
+		        selection.addRange(range);
+		    }
+	
+		    if(ie){
+			      var range = document.body.createTextRange();
+			      range.moveToElementText(endContainer);
+			      range.moveStart('character', pos);
+			      range.collapse(true);
+			      range.select();    		
+			}
+		     
+		},
+	
+		_setPositionInputTextArea : function(pos){
+			if(html5){
+				this.target.setSelectionRange(pos, pos);
+			}
+		}
 	};
 
-	function getCountChar(char, inStr){
-		if(typeof char.push == 'function'){
-			var count = 0;
+function getNodeByPosition(positionPath){
+	var path = positionPath.getPath();
+	var node = path.root;
+	var pathValues = path.path;
 
-			for(var i = 0; i < char.length; i++){
-				count += getCountChar(char[i], inStr);
+	for(var i = 0; i < pathValues.length; i++){
+		node = node.childNodes[pathValues[i]];
+	}
+
+	return node;
+}
+
+function PositionPath(target, textNode){
+	var tree = {};
+	var path = [];
+
+	path = pathFromNode(target, textNode, path);
+
+	this.getPath = function(){
+		return {
+			root : target,
+			path : path
+		};
+	};
+}
+
+function pathFromNode(target, node, path){
+
+	if(target === node || typeof node == 'undefined' || typeof node.parentElement == 'undefined'){
+		return path;
+	}
+
+	var childIndex = getIndex(node.parentElement, node);
+
+	path.unshift(childIndex);
+
+	return pathFromNode(target, node.parentElement, path);
+
+}
+
+function getIndex(parentNode, childNode){
+	var index;
+
+	for(var i = 0; i < parentNode.childNodes.length; i++){
+		if(parentNode.childNodes[i] === childNode){
+			return i;
+		}
+	}
+}
+
+function isChildOf(parent, node){
+	for(var i = 0; i < parent.childNodes.length; i++ ){
+		if(parent.childNodes[i] === node){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+window.Caret = Caret;
+
+}(this));
+/* src/caret.js ends. */
+
+/* src/target.js begins : */
+function Target(elt){
+	var _HTMLElt = elt;
+	var caret = new Caret(elt);
+	var _diffChar;
+	var _symbols;
+
+	this.insertSymbols = function insertSymbols(symbols){
+		_symbols = symbols;
+		
+		var newText = this.getValue();
+
+		for(var key in _symbols){
+			var symbol = _symbols[key];
+
+			newText = this.insertSymbol(newText, symbol);
+
+			if(symbol.matched){
+				console.log('matched');
+				_diffChar = symbol.textInserted.length - symbol.typed.length
+				console.log('diffChar', _diffChar);
+
+				this.setValue(newText);
 			}
-
-			return count;
 		}
 
-   		return (inStr.split(char).length - 1);
-	}
+	};
 
-	function convertToHtml(text){
-		tmp.innerHTML = text;
-		return tmp.innerHTML;
-	}
+	this.insertSymbol = function insertSymbol(text, symbol){
+		var newText = text;
+	
+		var pattern = '([^\\\\]|^)'+'('+symbol.pattern+')';
 
-	function convertToText(html){
-		tmp.innerHTML = html;
-		return tmp.textContent;
+		var regexp = new RegExp(pattern);
+
+		var replacedMatched = regexp.exec(newText);
+
+		symbol.typed = '';
+
+		if(replacedMatched){
+			symbol.typed = utils.convertToText(replacedMatched[2]);
+		}
+
+		symbol.matched = false;
+
+		//replace replaced with symbol
+		if(typeof symbol.limit == 'number'){
+			var count = this.getSymbolCount(symbol);
+
+			//if unescaped replaced chars are present but not replaced by their symbol
+			//they will be replaced by their symbol until limit is reached
+			while(count.unreplacedCount > 0 && count.symbolCount < symbol.limit){
+				newText = newText.replace(regexp, '$1'+symbol.inserted);
+				count = this.getSymbolCount(symbol, newText);
+				symbol.matched = true;					
+			}
+			
+		}else{
+			symbol.matched = regexp.test(newText);
+			newText = newText.replace(regexp, '$1'+symbol.inserted);
+		}
+
+		return newText;
+	};
+
+	this.getSymbolCount = function(symbol, txt){			
+		var res = {};
+		var text = txt || utils.convertToText(this.getValue());
+		var rawEncodedHtml = encodeURIComponent(text);
+		//get escaped replaced chars to exclude them from unreplaced count
+		var pattern = '\\\\'+symbol.pattern;
+		var regexp = new RegExp(pattern, 'g');
+
+		res.symbolCount = utils.getCountChar(symbol.encoded, rawEncodedHtml);
+		res.unreplacedCount = utils.getCountChar(symbol.replaced, text.replace(regexp, ''));
+
+		return res;
+	};
+	
+	this.getStatus = function getStatus(){
+		var text = this.getValue();
+		var res = { count : {}};
+		var rawEncodedHtml = encodeURIComponent(text);
+		var resText = '';
+
+		for(var key in _symbols){
+			var symbol = _symbols[key];
+			var symbolPattern = '('+symbol.encoded+')|('+symbol.encodedWithPadding+')';
+			var escapedPattern = '(\\\\)('+symbol.pattern+')';
+	
+			var regexpEscaped = new RegExp(escapedPattern, 'g');
+			var regexpSymbol = new RegExp(symbolPattern, 'g');
+
+			res.count[key] = getCountChar(symbol.encoded, rawEncodedHtml);
+			
+			rawEncodedHtml = rawEncodedHtml.replace(regexpSymbol, '');
+
+			resText = utils.htmlTrim(decodeURIComponent(rawEncodedHtml));
+
+			resText = resText.replace(regexpEscaped, '$2');
+
+			rawEncodedHtml = encodeURIComponent(resText);
+		}
+		
+		res.rawText = resText;
+		res.fullText = text;
+
+		return res;
+	};
+	
+	this.setValue = function setValue(text){
+		var caretPos = caret.getPosition();
+		var pos = caretPos.value + _diffChar;
+
+		if(this.isContentEditable === true){
+			_HTMLElt.innerHTML = text;
+		}else{	
+			_HTMLElt.value = text;
+		}
+
+		caret.setPosition(pos, caretPos.path);
+	};
+
+	this.getValue = function getValue(){
+		if(this.isContentEditable){
+			return _HTMLElt.innerHTML;
+		}else{
+			return _HTMLElt.value;
+		}
+	};
+			
+	this.isContentEditable = utils.isContentEditable(_HTMLElt);	
+	
+}
+/* src/target.js ends. */
+
+/* src/typer.js begins : */
+function Typer(HTMLElt, symbols, onTyped){
+var typer = this;
+var filterKeyDown = false;
+var originalText = '';
+var IE = false;
+var target;
+
+typer.symbols = utils.clone(symbols);
+
+typer.onTyped = onTyped;
+
+utils.IEFix();
+
+enableSymbols(HTMLElt);
+
+function enableSymbols(HTMLElt){
+
+	initSymbols(HTMLElt);
+
+	if(HTMLElt.addEventListener){
+		HTMLElt.addEventListener('keyup', onKeyup);
+
+		HTMLElt.addEventListener('keydown', onKeydown);
 	}
 	
-	function IEFix(){
-		if(typeof String.prototype.trim !== 'function') {
-		  String.prototype.trim = function() {
-		    return this.replace(/^\s+|\s+$/g, ''); 
-		  }
-		}
-	}
+	if(HTMLElt.attachEvent){
+		IE = true;
+		
+		HTMLElt.attachEvent('onkeyup', onKeyup);
 
-	function htmlTrim(text){
-		return text.replace(/^\s+|\s+$|&nbsp;/g, '');
-	}
-
-	function clone(obj){
-		var newObj = {};
-		var notObj = true;
-
-		for(var k in obj){
-			newObj[k] = {};
-
-			for(var i in obj[k]){
-				if(typeof obj[k][i] != 'undefined'){
-					notObj = false;
-					if(typeof obj[k][i].slice == 'function'){
-						newObj[k][i] = obj[k][i].slice(0);
-					}else{
-						newObj[k][i] = obj[k][i];
-					}
-					
-				}
-			}
-
-			if(notObj){
-				newObj[k] = obj[k];
-			}
-
-		}
-
-		return newObj;
-
+		HTMLElt.attachEvent('onkeydown', onKeydown);
 	}
 	
 }
 
+function initSymbols(target){
+
+	for(var i in typer.symbols){
+		var symbol = typer.symbols[i];
+
+		typer.symbols[i] = new Symbol(typer.symbols[i], target);		
+
+	}
+
+}
+
+function onKeydown(event){
+	//enter/left/right
+    var forbidden = [13, 39, 37];
+    var forbiddenKey = false;
+    
+    for(var i = 0; i < forbidden.length; i++){
+    	if(forbidden[i] == event.keyCode){
+    		forbiddenKey = true;
+    		break;
+    	}
+    }
+
+	filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
+}
+
+function onKeyup(event){
+
+	if(filterKeyDown){
+		return;
+	}
+	
+	var targetElt = IE ? event.srcElement : event.target;
+
+	if(!(target instanceof Target)){
+		target = new Target(targetElt);
+	}
+
+	target.event = event;
+
+	target.insertSymbols(typer.symbols);
+
+   	if(typeof typer.onTyped == 'function'){
+   		var result = target.getStatus();
+
+   		typer.onTyped(result, event);
+   	}
+}
+
+}
+/* src/typer.js ends. */
+
+/* src/main.js begins : */
+function symbolTyper(HTMLElt, symbols, onTyped){
+
+	if(typeof HTMLElt == 'undefined'){
+		throw new Error('symbolTyper : Argument 0 is missing. It must be an HTML Element or a collection of HTML elements.');
+	}
+
+	if(typeof symbols !== 'object'){
+		throw new Error('symbolTyper : Argument 1 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
+	}
+
+	if(typeof HTMLElt.length == 'undefined'){
+		utils.checkHtmlElt(HTMLElt, 0);
+		return new Typer(HTMLElt, symbols, onTyped);
+	}else{
+		var res = {};	
+
+		for(var i = 0; i < HTMLElt.length; i++){
+			utils.checkHtmlElt(HTMLElt[i], i);
+			HTMLElt[i].id = HTMLElt[i].id || 'symbol_typer_'+i;
+			res[HTMLElt[i].id] = new Typer(HTMLElt[i], symbols, onTyped);
+		}
+
+		return res;
+	} 
+
+}
+/* src/main.js ends. */
+
+window.symbolTyper = symbolTyper; 
+}(this));

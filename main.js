@@ -24,10 +24,21 @@
     };
 
    var typer = new symbolTyper(inputs, symbols, onTyped);
+console.log(typer);
+   /*form.onsubmit = function(){
+       var res = typer['inputDiv'].getStatus();
 
 
+//symbol_typer_0
+//symbol_typer_1
+//symbol_typer_2
+//inputDiv
+//symbol_typer_0
+//data-symbolTyper = 
 
-   function onTyped(res){
+   };*/
+
+   function onTyped(res, event){
          var boltsCount = document.getElementById('boltsCount');
          var heartsCount = document.getElementById('heartsCount');
          var rawText = document.getElementById('rawText');
