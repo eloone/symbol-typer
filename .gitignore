@@ -1,2 +1,3 @@
-./node_modules
+node_modules
 symbolTyper1.js
+.DS_Store
