@@ -1,5 +1,10 @@
-function Symbol(symbol, target){
+function Symbol(symbol, target, key){
 
+	symbol.key = key;
+
+	symbol.pattern = this.getPattern(symbol.replaced, target);
+
+	this.validate(symbol, key);
 	//power hack to insert a unicode as html entity in an input via javascript
 	symbol.htmlSymbol = utils.convertToHtml(symbol.unicode);
 
@@ -7,13 +12,12 @@ function Symbol(symbol, target){
 
 	symbol.convertedUnicode = utils.convertToText(symbol.unicode);
 
-	symbol.pattern = this.getPattern(symbol.replaced, target);
-
 	if(!symbol.before){
 		symbol.before = '';
 	}else{
 		if(utils.isContentEditable(target)){
 			symbol.before = symbol.before.replace(/^\s+|\s+$/g, '&nbsp;');
+			symbol.before = utils.convertToHtml(symbol.before);
 		}
 	}			
 
@@ -22,6 +26,7 @@ function Symbol(symbol, target){
 	}else{
 		if(utils.isContentEditable(target)){
 			symbol.after = symbol.after.replace(/^\s+|\s+$/g, '&nbsp;');
+			symbol.after = utils.convertToHtml(symbol.after);
 		}
 	}
 
@@ -33,6 +38,40 @@ function Symbol(symbol, target){
 }
 
 Symbol.prototype = {
+	validate : function validate(symbol, key){
+		if(typeof symbol.unicode == 'undefined'){
+			utils.throwError('Missing {unicode} property in the {'+key+'} symbol object');
+		}
+
+		if(typeof symbol.replaced == 'undefined'){
+			utils.throwError('Missing {replaced} property in the {'+key+'} symbol object');
+		}
+
+		var unicodeRegex = /^(&#x[a-fA-F0-9]+|&#\d+);$/;
+
+		if(unicodeRegex.test(symbol.unicode) === false){
+			utils.throwError('This unicode format "'+symbol.unicode+'" is invalid. It must be like &#173; (decimal) or &#xf007; (hexadecimal)');
+		}
+
+		if(typeof symbol.replaced !== 'string' && typeof symbol.replaced.push !== 'function'){
+			utils.throwError('{replaced} property in {'+key+'} symbol must be String or Array of strings');
+		}
+
+		var replacedRegex = new RegExp(symbol.pattern, 'g');
+
+		if(symbol.before){
+			if(replacedRegex.test(symbol.before)){
+				utils.throwError('{before} separator "'+symbol.before+'" in {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+			}
+		}
+
+		if(symbol.after){
+			if(replacedRegex.test(symbol.after)){
+				utils.throwError('{after} separator "'+symbol.after+'" in {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+			}
+		}
+	},
+
 	getPattern : function getPattern(symbolReplaced, target){
 
 		var specialCharRegex = /[-[\]{}()*+?.,\\^$#\s]/g;

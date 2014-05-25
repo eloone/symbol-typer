@@ -52,6 +52,10 @@ htmlTrim : function htmlTrim(text){
 	return text.replace(/^\s+|\s+$|&nbsp;/g, '');
 },
 
+throwError : function throwError(message){
+	throw new Error('symbolTyper : '+message);
+},
+
 clone : function clone(obj){
 	var newObj = {};
 	var notObj = true;

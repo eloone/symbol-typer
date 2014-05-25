@@ -3,7 +3,7 @@ var typer = this;
 var filterKeyDown = false;
 var originalText = '';
 var IE = false;
-var target;
+var _target;
 
 typer.symbols = utils.clone(symbols);
 
@@ -38,7 +38,7 @@ function initSymbols(target){
 	for(var i in typer.symbols){
 		var symbol = typer.symbols[i];
 
-		typer.symbols[i] = new Symbol(typer.symbols[i], target);		
+		typer.symbols[i] = new Symbol(typer.symbols[i], target, i);		
 
 	}
 
@@ -67,16 +67,16 @@ function onKeyup(event){
 	
 	var targetElt = IE ? event.srcElement : event.target;
 
-	if(!(target instanceof Target)){
-		target = new Target(targetElt);
+	if(!(_target instanceof Target)){
+		_target = new Target(targetElt);
 	}
 
-	target.event = event;
+	_target.event = event;
 
-	target.insertSymbols(typer.symbols);
+	_target.insertSymbols(typer.symbols);
 
    	if(typeof typer.onTyped == 'function'){
-   		var result = target.getStatus();
+   		var result = _target.getStatus();
 
    		typer.onTyped(result, event);
    	}

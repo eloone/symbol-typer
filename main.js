@@ -17,7 +17,7 @@
         },
             
         hearts : {
-            unicode : '&#xf004; ',
+            unicode : '&#xf004;',
             replaced : '<3',
             limit : 5
         }
@@ -27,8 +27,8 @@
 console.log(typer);
    /*form.onsubmit = function(){
        var res = typer['inputDiv'].getStatus();
-
-
+&#173;
+&#xf0e7;
 //symbol_typer_0
 //symbol_typer_1
 //symbol_typer_2

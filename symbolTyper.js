@@ -1,4 +1,4 @@
-/* symbolTyper - v0.1.0 - 2014-05-24 */
+/* symbolTyper - v0.1.0 - 2014-05-25 */
 (function(window){
 /* src/utils.js begins : */
 var tmp = document.createElement('p');
@@ -55,6 +55,10 @@ htmlTrim : function htmlTrim(text){
 	return text.replace(/^\s+|\s+$|&nbsp;/g, '');
 },
 
+throwError : function throwError(message){
+	throw new Error('symbolTyper : '+message);
+},
+
 clone : function clone(obj){
 	var newObj = {};
 	var notObj = true;
@@ -88,8 +92,13 @@ clone : function clone(obj){
 /* src/utils.js ends. */
 
 /* src/symbol.js begins : */
-function Symbol(symbol, target){
+function Symbol(symbol, target, key){
 
+	symbol.key = key;
+
+	symbol.pattern = this.getPattern(symbol.replaced, target);
+
+	this.validate(symbol, key);
 	//power hack to insert a unicode as html entity in an input via javascript
 	symbol.htmlSymbol = utils.convertToHtml(symbol.unicode);
 
@@ -97,13 +106,12 @@ function Symbol(symbol, target){
 
 	symbol.convertedUnicode = utils.convertToText(symbol.unicode);
 
-	symbol.pattern = this.getPattern(symbol.replaced, target);
-
 	if(!symbol.before){
 		symbol.before = '';
 	}else{
 		if(utils.isContentEditable(target)){
 			symbol.before = symbol.before.replace(/^\s+|\s+$/g, '&nbsp;');
+			symbol.before = utils.convertToHtml(symbol.before);
 		}
 	}			
 
@@ -112,6 +120,7 @@ function Symbol(symbol, target){
 	}else{
 		if(utils.isContentEditable(target)){
 			symbol.after = symbol.after.replace(/^\s+|\s+$/g, '&nbsp;');
+			symbol.after = utils.convertToHtml(symbol.after);
 		}
 	}
 
@@ -123,6 +132,40 @@ function Symbol(symbol, target){
 }
 
 Symbol.prototype = {
+	validate : function validate(symbol, key){
+		if(typeof symbol.unicode == 'undefined'){
+			utils.throwError('Missing {unicode} property in the {'+key+'} symbol object');
+		}
+
+		if(typeof symbol.replaced == 'undefined'){
+			utils.throwError('Missing {replaced} property in the {'+key+'} symbol object');
+		}
+
+		var unicodeRegex = /^(&#x[a-fA-F0-9]+|&#\d+);$/;
+
+		if(unicodeRegex.test(symbol.unicode) === false){
+			utils.throwError('This unicode format "'+symbol.unicode+'" is invalid. It must be like &#173; (decimal) or &#xf007; (hexadecimal)');
+		}
+
+		if(typeof symbol.replaced !== 'string' && typeof symbol.replaced.push !== 'function'){
+			utils.throwError('{replaced} property in {'+key+'} symbol must be String or Array of strings');
+		}
+
+		var replacedRegex = new RegExp(symbol.pattern, 'g');
+
+		if(symbol.before){
+			if(replacedRegex.test(symbol.before)){
+				utils.throwError('{before} separator "'+symbol.before+'" in {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+			}
+		}
+
+		if(symbol.after){
+			if(replacedRegex.test(symbol.after)){
+				utils.throwError('{after} separator "'+symbol.after+'" in {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+			}
+		}
+	},
+
 	getPattern : function getPattern(symbolReplaced, target){
 
 		var specialCharRegex = /[-[\]{}()*+?.,\\^$#\s]/g;
@@ -366,7 +409,7 @@ window.Caret = Caret;
 /* src/target.js begins : */
 function Target(elt){
 	var _HTMLElt = elt;
-	var caret = new Caret(elt);
+	var _caret = new Caret(elt);
 	var _diffChar;
 	var _symbols;
 
@@ -380,11 +423,10 @@ function Target(elt){
 
 			newText = this.insertSymbol(newText, symbol);
 
-			if(symbol.matched){
-				console.log('matched');
-				_diffChar = symbol.textInserted.length - symbol.typed.length
-				console.log('diffChar', _diffChar);
+			matched = symbol.matched;
 
+			if(symbol.matched){
+				_diffChar = symbol.textInserted.length - symbol.typed.length
 				this.setValue(newText);
 			}
 		}
@@ -417,7 +459,7 @@ function Target(elt){
 			while(count.unreplacedCount > 0 && count.symbolCount < symbol.limit){
 				newText = newText.replace(regexp, '$1'+symbol.inserted);
 				count = this.getSymbolCount(symbol, newText);
-				symbol.matched = true;					
+				symbol.matched = true;
 			}
 			
 		}else{
@@ -428,9 +470,11 @@ function Target(elt){
 		return newText;
 	};
 
-	this.getSymbolCount = function(symbol, txt){			
+	this.getSymbolCount = function(symbol, txt){	
+
 		var res = {};
 		var text = txt || utils.convertToText(this.getValue());
+
 		var rawEncodedHtml = encodeURIComponent(text);
 		//get escaped replaced chars to exclude them from unreplaced count
 		var pattern = '\\\\'+symbol.pattern;
@@ -438,6 +482,7 @@ function Target(elt){
 
 		res.symbolCount = utils.getCountChar(symbol.encoded, rawEncodedHtml);
 		res.unreplacedCount = utils.getCountChar(symbol.replaced, text.replace(regexp, ''));
+		res.symbol = symbol.key;
 
 		return res;
 	};
@@ -451,8 +496,7 @@ function Target(elt){
 		for(var key in _symbols){
 			var symbol = _symbols[key];
 			var symbolPattern = '('+symbol.encoded+')|('+symbol.encodedWithPadding+')';
-			var escapedPattern = '(\\\\)('+symbol.pattern+')';
-	
+			var escapedPattern = '(\\\\)('+symbol.pattern+')';	
 			var regexpEscaped = new RegExp(escapedPattern, 'g');
 			var regexpSymbol = new RegExp(symbolPattern, 'g');
 
@@ -474,16 +518,16 @@ function Target(elt){
 	};
 	
 	this.setValue = function setValue(text){
-		var caretPos = caret.getPosition();
+		var caretPos = _caret.getPosition();
 		var pos = caretPos.value + _diffChar;
 
-		if(this.isContentEditable === true){
+		if(this.isContentEditable){
 			_HTMLElt.innerHTML = text;
 		}else{	
 			_HTMLElt.value = text;
 		}
 
-		caret.setPosition(pos, caretPos.path);
+		_caret.setPosition(pos, caretPos.path);
 	};
 
 	this.getValue = function getValue(){
@@ -505,7 +549,7 @@ var typer = this;
 var filterKeyDown = false;
 var originalText = '';
 var IE = false;
-var target;
+var _target;
 
 typer.symbols = utils.clone(symbols);
 
@@ -540,7 +584,7 @@ function initSymbols(target){
 	for(var i in typer.symbols){
 		var symbol = typer.symbols[i];
 
-		typer.symbols[i] = new Symbol(typer.symbols[i], target);		
+		typer.symbols[i] = new Symbol(typer.symbols[i], target, i);		
 
 	}
 
@@ -569,16 +613,16 @@ function onKeyup(event){
 	
 	var targetElt = IE ? event.srcElement : event.target;
 
-	if(!(target instanceof Target)){
-		target = new Target(targetElt);
+	if(!(_target instanceof Target)){
+		_target = new Target(targetElt);
 	}
 
-	target.event = event;
+	_target.event = event;
 
-	target.insertSymbols(typer.symbols);
+	_target.insertSymbols(typer.symbols);
 
    	if(typeof typer.onTyped == 'function'){
-   		var result = target.getStatus();
+   		var result = _target.getStatus();
 
    		typer.onTyped(result, event);
    	}
@@ -587,15 +631,15 @@ function onKeyup(event){
 }
 /* src/typer.js ends. */
 
-/* src/main.js begins : */
+/* src/symbolTyper.js begins : */
 function symbolTyper(HTMLElt, symbols, onTyped){
 
 	if(typeof HTMLElt == 'undefined'){
-		throw new Error('symbolTyper : Argument 0 is missing. It must be an HTML Element or a collection of HTML elements.');
+		utils.throwError('Argument 0 is missing. It must be an HTML Element or a collection of HTML elements.');
 	}
 
 	if(typeof symbols !== 'object'){
-		throw new Error('symbolTyper : Argument 1 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
+		utils.throwError('Argument 1 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
 	}
 
 	if(typeof HTMLElt.length == 'undefined'){
@@ -614,7 +658,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 	} 
 
 }
-/* src/main.js ends. */
+/* src/symbolTyper.js ends. */
 
 window.symbolTyper = symbolTyper; 
 }(this));

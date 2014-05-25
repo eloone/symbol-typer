@@ -19,14 +19,14 @@ module.exports = function(grunt) {
           'src/caret.js',
           'src/target.js',
           'src/typer.js',
-          'src/main.js'
+          'src/symbolTyper.js'
           ],
         dest: 'symbolTyper.js',
       }
     },
     watch : {
       scripts: {
-        files: ['src/*.js'],
+        files: ['src/*.js', 'main.js'],
         tasks: ['concat'],
         options: {
           spawn: false,

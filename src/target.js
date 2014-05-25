@@ -1,6 +1,6 @@
 function Target(elt){
 	var _HTMLElt = elt;
-	var caret = new Caret(elt);
+	var _caret = new Caret(elt);
 	var _diffChar;
 	var _symbols;
 
@@ -14,11 +14,10 @@ function Target(elt){
 
 			newText = this.insertSymbol(newText, symbol);
 
-			if(symbol.matched){
-				console.log('matched');
-				_diffChar = symbol.textInserted.length - symbol.typed.length
-				console.log('diffChar', _diffChar);
+			matched = symbol.matched;
 
+			if(symbol.matched){
+				_diffChar = symbol.textInserted.length - symbol.typed.length
 				this.setValue(newText);
 			}
 		}
@@ -51,7 +50,7 @@ function Target(elt){
 			while(count.unreplacedCount > 0 && count.symbolCount < symbol.limit){
 				newText = newText.replace(regexp, '$1'+symbol.inserted);
 				count = this.getSymbolCount(symbol, newText);
-				symbol.matched = true;					
+				symbol.matched = true;
 			}
 			
 		}else{
@@ -62,9 +61,11 @@ function Target(elt){
 		return newText;
 	};
 
-	this.getSymbolCount = function(symbol, txt){			
+	this.getSymbolCount = function(symbol, txt){	
+
 		var res = {};
 		var text = txt || utils.convertToText(this.getValue());
+
 		var rawEncodedHtml = encodeURIComponent(text);
 		//get escaped replaced chars to exclude them from unreplaced count
 		var pattern = '\\\\'+symbol.pattern;
@@ -72,6 +73,7 @@ function Target(elt){
 
 		res.symbolCount = utils.getCountChar(symbol.encoded, rawEncodedHtml);
 		res.unreplacedCount = utils.getCountChar(symbol.replaced, text.replace(regexp, ''));
+		res.symbol = symbol.key;
 
 		return res;
 	};
@@ -85,8 +87,7 @@ function Target(elt){
 		for(var key in _symbols){
 			var symbol = _symbols[key];
 			var symbolPattern = '('+symbol.encoded+')|('+symbol.encodedWithPadding+')';
-			var escapedPattern = '(\\\\)('+symbol.pattern+')';
-	
+			var escapedPattern = '(\\\\)('+symbol.pattern+')';	
 			var regexpEscaped = new RegExp(escapedPattern, 'g');
 			var regexpSymbol = new RegExp(symbolPattern, 'g');
 
@@ -108,16 +109,16 @@ function Target(elt){
 	};
 	
 	this.setValue = function setValue(text){
-		var caretPos = caret.getPosition();
+		var caretPos = _caret.getPosition();
 		var pos = caretPos.value + _diffChar;
 
-		if(this.isContentEditable === true){
+		if(this.isContentEditable){
 			_HTMLElt.innerHTML = text;
 		}else{	
 			_HTMLElt.value = text;
 		}
 
-		caret.setPosition(pos, caretPos.path);
+		_caret.setPosition(pos, caretPos.path);
 	};
 
 	this.getValue = function getValue(){
