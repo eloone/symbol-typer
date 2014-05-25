@@ -10,23 +10,9 @@ function Symbol(symbol, target, key){
 
 	symbol.encoded = encodeURIComponent(utils.htmlTrim(symbol.htmlSymbol));
 
-	if(!symbol.before){
-		symbol.before = '';
-	}else{
-		if(utils.isContentEditable(target)){
-			symbol.before = symbol.before.replace(/^\s+|\s+$/g, '&nbsp;');
-			symbol.before = utils.convertToHtml(symbol.before);
-		}
-	}			
+	symbol.before = formatSeparator(symbol.before, target);		
 
-	if(!symbol.after){
-		symbol.after = '';
-	}else{
-		if(utils.isContentEditable(target)){
-			symbol.after = symbol.after.replace(/^\s+|\s+$/g, '&nbsp;');
-			symbol.after = utils.convertToHtml(symbol.after);
-		}
-	}
+	symbol.after = formatSeparator(symbol.after, target);
 
 	symbol.inserted = symbol.before+symbol.htmlSymbol+symbol.after;
 
@@ -35,7 +21,21 @@ function Symbol(symbol, target, key){
 	return symbol;
 }
 
+function formatSeparator(separator, target){
+	if(!separator){
+		return '';
+	}else{
+		if(utils.isContentEditable(target)){
+			var sep = separator.replace(/^\s+|\s+$/g, '&nbsp;');
+			return utils.convertToHtml(sep);
+		}
+	}
+
+	return separator;	
+}
+
 Symbol.prototype = {
+	//controls the input of the plugin
 	validate : function validate(symbol, key){
 		if(typeof symbol.unicode == 'undefined'){
 			utils.throwError('Missing {unicode} property in the {'+key+'} symbol object');

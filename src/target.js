@@ -1,12 +1,13 @@
-function Target(elt){
+function Target(elt, symbols){
 	var _HTMLElt = elt;
 	var _caret = new Caret();
 	var _diffChar;
-	var _symbols;
+	var _symbols = symbols;
+console.log(_caret);
+	this.node = elt;
 
-	this.insertSymbols = function insertSymbols(symbols){
-		_symbols = symbols;
-		
+	this.insertSymbols = function insertSymbols(){
+
 		var newText = this.getValue();
 
 		for(var key in _symbols){
@@ -84,7 +85,7 @@ function Target(elt){
 
 		for(var key in _symbols){
 			var symbol = _symbols[key];
-			var symbolPattern = '('+symbol.encoded+')|('+symbol.encodedWithPadding+')';
+			var symbolPattern = '('+symbol.encoded+')';
 			var escapedPattern = '(\\\\)('+symbol.pattern+')';	
 			var regexpEscaped = new RegExp(escapedPattern, 'g');
 			var regexpSymbol = new RegExp(symbolPattern, 'g');
@@ -108,7 +109,6 @@ function Target(elt){
 	
 	this.setValue = function setValue(text){
 		var caretPos = _caret.getPosition(_HTMLElt);
-
 		var pos = caretPos.value + _diffChar;
 
 		if(this.isContentEditable){
@@ -117,9 +117,7 @@ function Target(elt){
 			_HTMLElt.value = text;
 		}
 
-		//_caret.setPosition(pos, caretPos.path);
-
-		_caret.setPosition(1, _HTMLElt);
+		_caret.setPosition(pos, caretPos.path);
 	};
 
 	this.getValue = function getValue(){

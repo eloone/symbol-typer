@@ -3,6 +3,7 @@
     var input1 = document.getElementById('input1');
     var inputdiv = document.getElementById('inputDiv');
     var textarea = document.getElementById('textarea');
+    var btn = document.getElementById('btn');
     
     var inputs = [input, input1, inputDiv, textarea];
    //input.addEventListener('keyup', onKeyup);
@@ -37,6 +38,11 @@ console.log(typer);
 //data-symbolTyper = 
 
    };*/
+
+   btn.onclick = function getStatus(){
+    var t = typer['textarea'].getStatus();
+    console.log(t);
+   }
 
    function onTyped(res, event){
          var boltsCount = document.getElementById('boltsCount');

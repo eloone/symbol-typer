@@ -2,8 +2,7 @@ function Typer(HTMLElt, symbols, onTyped){
 	var _typer = this;
 	var _filterKeyDown = false;
 	var _IE = false;
-	var _target;
-
+	
 	_typer.symbols = utils.clone(symbols);
 
 	_typer.onTyped = onTyped;
@@ -11,6 +10,12 @@ function Typer(HTMLElt, symbols, onTyped){
 	utils.IEFix();
 
 	enableSymbols(HTMLElt);
+
+	var _target = new Target(HTMLElt, _typer.symbols);
+
+	this.getStatus = function(){
+		return _target.getStatus();
+	};
 
 	function enableSymbols(HTMLElt){
 
@@ -63,13 +68,13 @@ function Typer(HTMLElt, symbols, onTyped){
 		
 		var targetElt = _IE ? event.srcElement : event.target;
 
-		if(!(_target instanceof Target)){
-			_target = new Target(targetElt);
+		if(targetElt !== _target.node){
+			_target = new Target(targetElt, _typer.symbols);
 		}
 
 		_target.event = event;
 
-		_target.insertSymbols(_typer.symbols);
+		_target.insertSymbols();
 
 	   	if(typeof _typer.onTyped == 'function'){
 	   		var result = _target.getStatus();

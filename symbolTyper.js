@@ -1,4 +1,4 @@
-/* symbolTyper - v0.1.0 - 2014-05-25 */
+/* symbolTyper - v0.1.0 - 2014-05-26 */
 (function(window){
 /* src/utils.js begins : */
 var tmp = document.createElement('p');
@@ -104,23 +104,9 @@ function Symbol(symbol, target, key){
 
 	symbol.encoded = encodeURIComponent(utils.htmlTrim(symbol.htmlSymbol));
 
-	if(!symbol.before){
-		symbol.before = '';
-	}else{
-		if(utils.isContentEditable(target)){
-			symbol.before = symbol.before.replace(/^\s+|\s+$/g, '&nbsp;');
-			symbol.before = utils.convertToHtml(symbol.before);
-		}
-	}			
+	symbol.before = formatSeparator(symbol.before, target);		
 
-	if(!symbol.after){
-		symbol.after = '';
-	}else{
-		if(utils.isContentEditable(target)){
-			symbol.after = symbol.after.replace(/^\s+|\s+$/g, '&nbsp;');
-			symbol.after = utils.convertToHtml(symbol.after);
-		}
-	}
+	symbol.after = formatSeparator(symbol.after, target);
 
 	symbol.inserted = symbol.before+symbol.htmlSymbol+symbol.after;
 
@@ -129,7 +115,21 @@ function Symbol(symbol, target, key){
 	return symbol;
 }
 
+function formatSeparator(separator, target){
+	if(!separator){
+		return '';
+	}else{
+		if(utils.isContentEditable(target)){
+			var sep = separator.replace(/^\s+|\s+$/g, '&nbsp;');
+			return utils.convertToHtml(sep);
+		}
+	}
+
+	return separator;	
+}
+
 Symbol.prototype = {
+	//controls the input of the plugin
 	validate : function validate(symbol, key){
 		if(typeof symbol.unicode == 'undefined'){
 			utils.throwError('Missing {unicode} property in the {'+key+'} symbol object');
@@ -195,8 +195,6 @@ Symbol.prototype = {
 
 	var html5;
 	var ie;
-
-	var test;
 	
 	if(window.addEventListener){
 		window.addEventListener('load', init);
@@ -210,8 +208,6 @@ Symbol.prototype = {
 		html5 = (window.getSelection && document.createRange);//Modern Browsers 
 		ie = (document.selection && document.body.createTextRange);//<IE9
 	}
-
-	function Caret(){}
 
 	function Target(target){
 
@@ -235,6 +231,8 @@ Symbol.prototype = {
 		}
 	}
 
+	function Caret(){}
+
 	Caret.prototype = {
 	
 		getPosition : function(target){
@@ -245,15 +243,15 @@ Symbol.prototype = {
 			}
 
 			if(this.target.isContentEditable()){
-				return this._getPositionContentEditable();
+				return _getPositionContentEditable.call(this);
 			}else{
-				return this._getPositionInputTextArea();
+				return _getPositionInputTextArea.call(this);
 			}		
 		},
 	
 		setPosition : function(pos, endContainer){
 			if(pos && !endContainer){
-				throw new Error('Caret : Missing argument 2. It must be the HTML Element where to position the caret or a PositionPath.');
+				throw new Error('Caret : Argument 2 "'+endContainer+'" is invalid. It must be the HTML Element where to position the caret or a PositionPath.');
 			}
 
 			if(endContainer instanceof PositionPath){
@@ -264,101 +262,109 @@ Symbol.prototype = {
 			}
 
 			if(this.target.isContentEditable() || this.target.isText()){
-				return this._setPositionElement(pos);
+				return _setPositionElement.call(this, pos);
 			}else{
-				return this._setPositionInputTextArea(pos);
-			}
-		},
-	
-		_getPositionContentEditable : function(){
-
-			this.target.node.focus();
-
-			if(html5){
-				var range = window.getSelection().getRangeAt(0);
-
-	          		return {
-	          			value : range.endOffset,
-	          			path : new PositionPath(this.target.node, range.endContainer),
-	          			container : range.endContainer
-	          		};
-			}
-	
-			if(ie){
-	            var range1 = document.selection.createRange(),
-	                range2 = document.body.createTextRange();
-	            
-	            range2.moveToElementText(range1.parentElement());
-	            range2.setEndPoint('EndToEnd', range1);
-	            
-	            return {
-	            	value : range2.text.length,
-	            	container : range1.parentElement()
-	            };
-			}
-		},
-	
-		_getPositionInputTextArea : function(){
-			this.target.node.focus();
-			
-			if(html5){
-				return {
-					value : this.target.node.selectionStart,
-					container : this.target.node
-				};
-			}
-			
-			if(ie){
-			 var pos = 0,
-	            range = this.target.node.createTextRange(),
-	            range2 = document.selection.createRange().duplicate(),
-	            bookmark = range2.getBookmark();
-	
-		        range.moveToBookmark(bookmark);
-		        while (range.moveStart('character', -1) !== 0) pos++;
-		        return {
-		        	value : pos,
-		        	container : range.parentElement()
-		        };
-			}
-		},
-	
-		_setPositionElement : function(pos){
-			var endContainer = this.target.node;
-			
-			if(!this.target.isText()){
-				endContainer = this.target.node.firstChild;	
-			}
-		
-		    if (html5) {
-		       // endContainer.focus();
-		     //   window.getSelection().collapse(endContainer, pos);
-		        var range = document.createRange();//Create a range (a range is a like the selection but invisible)
-		        range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
-		        range.setEnd(endContainer, pos);
-		        range.collapse();//collapse the range to the end point. false means collapse to end rather than the start
-		        selection = window.getSelection();//get the selection object (allows you to change selection)
-		        selection.removeAllRanges();//remove any selections already made
-		        selection.addRange(range);
-		    }
-	
-		    if(ie){
-			      var range = document.body.createTextRange();
-			      range.moveToElementText(endContainer);
-			      range.moveStart('character', pos);
-			      range.collapse(true);
-			      range.select();    		
-			}
-		     
-		},
-	
-		_setPositionInputTextArea : function(pos){
-			if(html5){
-				this.target.node.setSelectionRange(pos, pos);
+				return _setPositionInputTextArea.call(this, pos);
 			}
 		}
 	};
 
+//private methods
+function _getPositionContentEditable(){
+
+	this.target.node.focus();
+
+	if(html5){
+		var range = window.getSelection().getRangeAt(0);
+
+      		return {
+      			value : range.endOffset,
+      			path : new PositionPath(this.target.node, range.endContainer),
+      			container : range.endContainer
+      		};
+	}
+
+	if(ie){
+        var range1 = document.selection.createRange(),
+            range2 = document.body.createTextRange();
+        
+        range2.moveToElementText(range1.parentElement());
+        range2.setEndPoint('EndToEnd', range1);
+        
+        return {
+        	value : range2.text.length,
+        	path : new PositionPath(this.target.node, range1.parentElement()),
+        	container : range1.parentElement()
+        };
+	}
+}
+
+function _getPositionInputTextArea(){
+	this.target.node.focus();
+	
+	if(html5){
+		return {
+			value : this.target.node.selectionStart,
+			path : new PositionPath(this.target.node, this.target.node),
+			container : this.target.node
+		};
+	}
+	
+	if(ie){
+	 var pos = 0,
+        range = this.target.node.createTextRange(),
+        range2 = document.selection.createRange().duplicate(),
+        bookmark = range2.getBookmark();
+
+        range.moveToBookmark(bookmark);
+        while (range.moveStart('character', -1) !== 0) pos++;
+        return {
+        	value : pos,
+        	path : new PositionPath(this.target.node, range.parentElement()),
+        	container : range.parentElement()
+        };
+	}
+}
+
+function _setPositionElement(pos){
+	var endContainer = this.target.node;
+	
+	if(!this.target.isText()){
+		endContainer = this.target.node.firstChild;	
+	}
+
+    if (html5) {
+       // endContainer.focus();
+     //   window.getSelection().collapse(endContainer, pos);
+        var range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
+        range.setEnd(endContainer, pos);
+        range.collapse();//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);
+    }
+
+    if(ie){
+	      var range = document.body.createTextRange();
+	      range.moveToElementText(endContainer);
+	      range.moveStart('character', pos);
+	      range.collapse(true);
+	      range.select();    		
+	}
+     
+}
+
+function _setPositionInputTextArea(pos){
+	if(html5){
+		this.target.node.setSelectionRange(pos, pos);
+	}
+}
+
+//utils functions
+
+//retrieves a node in a DOM tree given a PositionPath object
+//the PositionPath object gives the path array needed to find the child node from the root node
 function getNodeByPosition(positionPath){
 	var tree = positionPath.getTree();
 	var node = tree.root;
@@ -371,6 +377,10 @@ function getNodeByPosition(positionPath){
 	return node;
 }
 
+//path is an array that locates a node in a DOM tree under a root node
+//[0,2,3] = child node is the 3rd child of the 2nd child of the 1st child of root node
+//this allow to find node in a DOM tree by position in a tree where nodes are not the same for DOM but the same in position 
+//for example when the tree was dynamically modified
 function PositionPath(target, textNode){
 	var tree = {};
 	var path = [];
@@ -385,6 +395,7 @@ function PositionPath(target, textNode){
 	};
 }
 
+//array that locates a node in a DOM tree under a root node
 function pathFromNode(target, node, path){
 
 	if(target === node || typeof node == 'undefined' || typeof node.parentElement == 'undefined'){
@@ -409,31 +420,22 @@ function getIndex(parentNode, childNode){
 	}
 }
 
-function isChildOf(parent, node){
-	for(var i = 0; i < parent.childNodes.length; i++ ){
-		if(parent.childNodes[i] === node){
-			return true;
-		}
-	}
-
-	return false;
-}
-
 window.Caret = Caret;
 
 }(this));
 /* src/caret.js ends. */
 
 /* src/target.js begins : */
-function Target(elt){
+function Target(elt, symbols){
 	var _HTMLElt = elt;
 	var _caret = new Caret();
 	var _diffChar;
-	var _symbols;
+	var _symbols = symbols;
+console.log(_caret);
+	this.node = elt;
 
-	this.insertSymbols = function insertSymbols(symbols){
-		_symbols = symbols;
-		
+	this.insertSymbols = function insertSymbols(){
+
 		var newText = this.getValue();
 
 		for(var key in _symbols){
@@ -511,7 +513,7 @@ function Target(elt){
 
 		for(var key in _symbols){
 			var symbol = _symbols[key];
-			var symbolPattern = '('+symbol.encoded+')|('+symbol.encodedWithPadding+')';
+			var symbolPattern = '('+symbol.encoded+')';
 			var escapedPattern = '(\\\\)('+symbol.pattern+')';	
 			var regexpEscaped = new RegExp(escapedPattern, 'g');
 			var regexpSymbol = new RegExp(symbolPattern, 'g');
@@ -535,7 +537,6 @@ function Target(elt){
 	
 	this.setValue = function setValue(text){
 		var caretPos = _caret.getPosition(_HTMLElt);
-
 		var pos = caretPos.value + _diffChar;
 
 		if(this.isContentEditable){
@@ -544,9 +545,7 @@ function Target(elt){
 			_HTMLElt.value = text;
 		}
 
-		//_caret.setPosition(pos, caretPos.path);
-
-		_caret.setPosition(1, _HTMLElt);
+		_caret.setPosition(pos, caretPos.path);
 	};
 
 	this.getValue = function getValue(){
@@ -567,8 +566,7 @@ function Typer(HTMLElt, symbols, onTyped){
 	var _typer = this;
 	var _filterKeyDown = false;
 	var _IE = false;
-	var _target;
-
+	
 	_typer.symbols = utils.clone(symbols);
 
 	_typer.onTyped = onTyped;
@@ -576,6 +574,12 @@ function Typer(HTMLElt, symbols, onTyped){
 	utils.IEFix();
 
 	enableSymbols(HTMLElt);
+
+	var _target = new Target(HTMLElt, _typer.symbols);
+
+	this.getStatus = function(){
+		return _target.getStatus();
+	};
 
 	function enableSymbols(HTMLElt){
 
@@ -628,13 +632,13 @@ function Typer(HTMLElt, symbols, onTyped){
 		
 		var targetElt = _IE ? event.srcElement : event.target;
 
-		if(!(_target instanceof Target)){
-			_target = new Target(targetElt);
+		if(targetElt !== _target.node){
+			_target = new Target(targetElt, _typer.symbols);
 		}
 
 		_target.event = event;
 
-		_target.insertSymbols(_typer.symbols);
+		_target.insertSymbols();
 
 	   	if(typeof _typer.onTyped == 'function'){
 	   		var result = _target.getStatus();
