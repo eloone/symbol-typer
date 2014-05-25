@@ -14,8 +14,6 @@ function Target(elt){
 
 			newText = this.insertSymbol(newText, symbol);
 
-			matched = symbol.matched;
-
 			if(symbol.matched){
 				_diffChar = symbol.textInserted.length - symbol.typed.length
 				this.setValue(newText);

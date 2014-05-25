@@ -10,8 +10,6 @@ function Symbol(symbol, target, key){
 
 	symbol.encoded = encodeURIComponent(utils.htmlTrim(symbol.htmlSymbol));
 
-	symbol.convertedUnicode = utils.convertToText(symbol.unicode);
-
 	if(!symbol.before){
 		symbol.before = '';
 	}else{
@@ -54,7 +52,7 @@ Symbol.prototype = {
 		}
 
 		if(typeof symbol.replaced !== 'string' && typeof symbol.replaced.push !== 'function'){
-			utils.throwError('{replaced} property in {'+key+'} symbol must be String or Array of strings');
+			utils.throwError('{replaced} property in {'+key+'} symbol must be a String or an Array of strings');
 		}
 
 		var replacedRegex = new RegExp(symbol.pattern, 'g');

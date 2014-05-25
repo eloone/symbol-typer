@@ -1,13 +1,12 @@
 function Typer(HTMLElt, symbols, onTyped){
-var typer = this;
-var filterKeyDown = false;
-var originalText = '';
-var IE = false;
+var _typer = this;
+var _filterKeyDown = false;
+var _IE = false;
 var _target;
 
-typer.symbols = utils.clone(symbols);
+_typer.symbols = utils.clone(symbols);
 
-typer.onTyped = onTyped;
+_typer.onTyped = onTyped;
 
 utils.IEFix();
 
@@ -24,7 +23,7 @@ function enableSymbols(HTMLElt){
 	}
 	
 	if(HTMLElt.attachEvent){
-		IE = true;
+		_IE = true;
 		
 		HTMLElt.attachEvent('onkeyup', onKeyup);
 
@@ -35,10 +34,10 @@ function enableSymbols(HTMLElt){
 
 function initSymbols(target){
 
-	for(var i in typer.symbols){
-		var symbol = typer.symbols[i];
+	for(var i in _typer.symbols){
+		var symbol = _typer.symbols[i];
 
-		typer.symbols[i] = new Symbol(typer.symbols[i], target, i);		
+		_typer.symbols[i] = new Symbol(_typer.symbols[i], target, i);		
 
 	}
 
@@ -56,16 +55,16 @@ function onKeydown(event){
     	}
     }
 
-	filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
+	_filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
 }
 
 function onKeyup(event){
 
-	if(filterKeyDown){
+	if(_filterKeyDown){
 		return;
 	}
 	
-	var targetElt = IE ? event.srcElement : event.target;
+	var targetElt = _IE ? event.srcElement : event.target;
 
 	if(!(_target instanceof Target)){
 		_target = new Target(targetElt);
@@ -73,12 +72,12 @@ function onKeyup(event){
 
 	_target.event = event;
 
-	_target.insertSymbols(typer.symbols);
+	_target.insertSymbols(_typer.symbols);
 
-   	if(typeof typer.onTyped == 'function'){
+   	if(typeof _typer.onTyped == 'function'){
    		var result = _target.getStatus();
 
-   		typer.onTyped(result, event);
+   		_typer.onTyped(result, event);
    	}
 }
 
