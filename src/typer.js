@@ -1,84 +1,81 @@
 function Typer(HTMLElt, symbols, onTyped){
-var _typer = this;
-var _filterKeyDown = false;
-var _IE = false;
-var _target;
+	var _typer = this;
+	var _filterKeyDown = false;
+	var _IE = false;
+	var _target;
 
-_typer.symbols = utils.clone(symbols);
+	_typer.symbols = utils.clone(symbols);
 
-_typer.onTyped = onTyped;
+	_typer.onTyped = onTyped;
 
-utils.IEFix();
+	utils.IEFix();
 
-enableSymbols(HTMLElt);
+	enableSymbols(HTMLElt);
 
-function enableSymbols(HTMLElt){
+	function enableSymbols(HTMLElt){
 
-	initSymbols(HTMLElt);
+		initSymbols(HTMLElt);
 
-	if(HTMLElt.addEventListener){
-		HTMLElt.addEventListener('keyup', onKeyup);
+		if(HTMLElt.addEventListener){
+			HTMLElt.addEventListener('keyup', onKeyup);
 
-		HTMLElt.addEventListener('keydown', onKeydown);
-	}
-	
-	if(HTMLElt.attachEvent){
-		_IE = true;
+			HTMLElt.addEventListener('keydown', onKeydown);
+		}
 		
-		HTMLElt.attachEvent('onkeyup', onKeyup);
+		if(HTMLElt.attachEvent){
+			_IE = true;
+			
+			HTMLElt.attachEvent('onkeyup', onKeyup);
 
-		HTMLElt.attachEvent('onkeydown', onKeydown);
-	}
-	
-}
-
-function initSymbols(target){
-
-	for(var i in _typer.symbols){
-		var symbol = _typer.symbols[i];
-
-		_typer.symbols[i] = new Symbol(_typer.symbols[i], target, i);		
-
+			HTMLElt.attachEvent('onkeydown', onKeydown);
+		}
+		
 	}
 
-}
+	function initSymbols(target){
 
-function onKeydown(event){
-	//enter/left/right
-    var forbidden = [13, 39, 37];
-    var forbiddenKey = false;
-    
-    for(var i = 0; i < forbidden.length; i++){
-    	if(forbidden[i] == event.keyCode){
-    		forbiddenKey = true;
-    		break;
-    	}
-    }
+		for(var i in _typer.symbols){
+			_typer.symbols[i] = new Symbol(_typer.symbols[i], target, i);
+		}
 
-	_filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
-}
-
-function onKeyup(event){
-
-	if(_filterKeyDown){
-		return;
-	}
-	
-	var targetElt = _IE ? event.srcElement : event.target;
-
-	if(!(_target instanceof Target)){
-		_target = new Target(targetElt);
 	}
 
-	_target.event = event;
+	function onKeydown(event){
+		//enter/left/right
+	    var forbidden = [13, 39, 37];
+	    var forbiddenKey = false;
+	    
+	    for(var i = 0; i < forbidden.length; i++){
+	    	if(forbidden[i] == event.keyCode){
+	    		forbiddenKey = true;
+	    		break;
+	    	}
+	    }
 
-	_target.insertSymbols(_typer.symbols);
+		_filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
+	}
 
-   	if(typeof _typer.onTyped == 'function'){
-   		var result = _target.getStatus();
+	function onKeyup(event){
 
-   		_typer.onTyped(result, event);
-   	}
-}
+		if(_filterKeyDown){
+			return;
+		}
+		
+		var targetElt = _IE ? event.srcElement : event.target;
+
+		if(!(_target instanceof Target)){
+			_target = new Target(targetElt);
+		}
+
+		_target.event = event;
+
+		_target.insertSymbols(_typer.symbols);
+
+	   	if(typeof _typer.onTyped == 'function'){
+	   		var result = _target.getStatus();
+
+	   		_typer.onTyped(result, event);
+	   	}
+	}
 
 }

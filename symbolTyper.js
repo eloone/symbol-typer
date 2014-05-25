@@ -211,20 +211,40 @@ Symbol.prototype = {
 		ie = (document.selection && document.body.createTextRange);//<IE9
 	}
 
-	function Caret(target){
-		this.target = target;
+	function Caret(){}
 
-		if( target.nodeType != 1){
-			throw new Error('Caret expects an HTML Element as argument in new Caret(HTMLElement)');
+	function Target(target){
+
+		if( !target || target.nodeType != 1 && target.nodeType != 3){
+			throw new Error('Caret : the target "'+target+'" must be an HTML Element or Text node');
 		}
-	
-		this.isContentEditable = (!(target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') && target.getAttribute('contenteditable') === 'true');
+
+		this.node = target;
+	}
+
+	Target.prototype = {
+		isContentEditable : function(){
+			if(this.node.nodeType == 1){
+				return (!(this.node.tagName == 'INPUT' || this.node.tagName == 'TEXTAREA') && this.node.getAttribute('contenteditable') === 'true');
+			}else{
+				return false;
+			}
+		},
+		isText : function(){
+			return this.node.nodeType == 3;
+		}
 	}
 
 	Caret.prototype = {
 	
-		getPosition : function(){
-			if(this.isContentEditable){
+		getPosition : function(target){
+			this.target = new Target(target);
+
+			if(this.target.isText()){
+				throw new Error('Caret can get the caret\'s position only from editable HTML Elements. "'+this.target.node+'" is not editable.');
+			}
+
+			if(this.target.isContentEditable()){
 				return this._getPositionContentEditable();
 			}else{
 				return this._getPositionInputTextArea();
@@ -232,22 +252,34 @@ Symbol.prototype = {
 		},
 	
 		setPosition : function(pos, endContainer){
-			if(this.isContentEditable){
-				return this._setPositionContentEditable(pos, endContainer);
+			if(pos && !endContainer){
+				throw new Error('Caret : Missing argument 2. It must be the HTML Element where to position the caret or a PositionPath.');
+			}
+
+			if(endContainer instanceof PositionPath){
+				var endNode = getNodeByPosition(endContainer);
+				this.target = new Target(endNode);
 			}else{
-				return this._setPositionInputTextArea(pos, endContainer);
+				this.target = new Target(endContainer);
+			}
+
+			if(this.target.isContentEditable() || this.target.isText()){
+				return this._setPositionElement(pos);
+			}else{
+				return this._setPositionInputTextArea(pos);
 			}
 		},
 	
 		_getPositionContentEditable : function(){
-			this.target.focus();
+
+			this.target.node.focus();
 
 			if(html5){
 				var range = window.getSelection().getRangeAt(0);
 
 	          		return {
 	          			value : range.endOffset,
-	          			path : new PositionPath(this.target, range.endContainer),
+	          			path : new PositionPath(this.target.node, range.endContainer),
 	          			container : range.endContainer
 	          		};
 			}
@@ -267,18 +299,18 @@ Symbol.prototype = {
 		},
 	
 		_getPositionInputTextArea : function(){
-			this.target.focus();
+			this.target.node.focus();
 			
 			if(html5){
 				return {
-					value : this.target.selectionStart,
-					container : this.target
+					value : this.target.node.selectionStart,
+					container : this.target.node
 				};
 			}
 			
 			if(ie){
 			 var pos = 0,
-	            range = this.target.createTextRange(),
+	            range = this.target.node.createTextRange(),
 	            range2 = document.selection.createRange().duplicate(),
 	            bookmark = range2.getBookmark();
 	
@@ -291,30 +323,18 @@ Symbol.prototype = {
 			}
 		},
 	
-		_setPositionContentEditable : function(pos, positionPath){
-			var endContainer;
-
-			if(typeof positionPath == 'undefined'){
-				endContainer = this.target.firstChild;
+		_setPositionElement : function(pos){
+			var endContainer = this.target.node;
+			
+			if(!this.target.isText()){
+				endContainer = this.target.node.firstChild;	
 			}
-
-			if(positionPath instanceof PositionPath){
-				endContainer = getNodeByPosition(positionPath);
-			}
-
-			if(typeof endContainer == 'undefined' ){
-				if(isChildOf(this.target, positionPath)){
-					endContainer = positionPath;
-				}else{
-					console.warn('Caret.setPosition : Specified end container must be a child of the caret\'s target');
-				}
-			}
-	
+		
 		    if (html5) {
 		       // endContainer.focus();
 		     //   window.getSelection().collapse(endContainer, pos);
 		        var range = document.createRange();//Create a range (a range is a like the selection but invisible)
-		        range.selectNodeContents(this.target);//Select the entire contents of the element with the range
+		        range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
 		        range.setEnd(endContainer, pos);
 		        range.collapse();//collapse the range to the end point. false means collapse to end rather than the start
 		        selection = window.getSelection();//get the selection object (allows you to change selection)
@@ -334,15 +354,15 @@ Symbol.prototype = {
 	
 		_setPositionInputTextArea : function(pos){
 			if(html5){
-				this.target.setSelectionRange(pos, pos);
+				this.target.node.setSelectionRange(pos, pos);
 			}
 		}
 	};
 
 function getNodeByPosition(positionPath){
-	var path = positionPath.getPath();
-	var node = path.root;
-	var pathValues = path.path;
+	var tree = positionPath.getTree();
+	var node = tree.root;
+	var pathValues = tree.path;
 
 	for(var i = 0; i < pathValues.length; i++){
 		node = node.childNodes[pathValues[i]];
@@ -357,7 +377,7 @@ function PositionPath(target, textNode){
 
 	path = pathFromNode(target, textNode, path);
 
-	this.getPath = function(){
+	this.getTree = function(){
 		return {
 			root : target,
 			path : path
@@ -407,7 +427,7 @@ window.Caret = Caret;
 /* src/target.js begins : */
 function Target(elt){
 	var _HTMLElt = elt;
-	var _caret = new Caret(elt);
+	var _caret = new Caret();
 	var _diffChar;
 	var _symbols;
 
@@ -514,7 +534,8 @@ function Target(elt){
 	};
 	
 	this.setValue = function setValue(text){
-		var caretPos = _caret.getPosition();
+		var caretPos = _caret.getPosition(_HTMLElt);
+
 		var pos = caretPos.value + _diffChar;
 
 		if(this.isContentEditable){
@@ -523,7 +544,9 @@ function Target(elt){
 			_HTMLElt.value = text;
 		}
 
-		_caret.setPosition(pos, caretPos.path);
+		//_caret.setPosition(pos, caretPos.path);
+
+		_caret.setPosition(1, _HTMLElt);
 	};
 
 	this.getValue = function getValue(){
@@ -541,87 +564,84 @@ function Target(elt){
 
 /* src/typer.js begins : */
 function Typer(HTMLElt, symbols, onTyped){
-var _typer = this;
-var _filterKeyDown = false;
-var _IE = false;
-var _target;
+	var _typer = this;
+	var _filterKeyDown = false;
+	var _IE = false;
+	var _target;
 
-_typer.symbols = utils.clone(symbols);
+	_typer.symbols = utils.clone(symbols);
 
-_typer.onTyped = onTyped;
+	_typer.onTyped = onTyped;
 
-utils.IEFix();
+	utils.IEFix();
 
-enableSymbols(HTMLElt);
+	enableSymbols(HTMLElt);
 
-function enableSymbols(HTMLElt){
+	function enableSymbols(HTMLElt){
 
-	initSymbols(HTMLElt);
+		initSymbols(HTMLElt);
 
-	if(HTMLElt.addEventListener){
-		HTMLElt.addEventListener('keyup', onKeyup);
+		if(HTMLElt.addEventListener){
+			HTMLElt.addEventListener('keyup', onKeyup);
 
-		HTMLElt.addEventListener('keydown', onKeydown);
-	}
-	
-	if(HTMLElt.attachEvent){
-		_IE = true;
+			HTMLElt.addEventListener('keydown', onKeydown);
+		}
 		
-		HTMLElt.attachEvent('onkeyup', onKeyup);
+		if(HTMLElt.attachEvent){
+			_IE = true;
+			
+			HTMLElt.attachEvent('onkeyup', onKeyup);
 
-		HTMLElt.attachEvent('onkeydown', onKeydown);
-	}
-	
-}
-
-function initSymbols(target){
-
-	for(var i in _typer.symbols){
-		var symbol = _typer.symbols[i];
-
-		_typer.symbols[i] = new Symbol(_typer.symbols[i], target, i);		
-
+			HTMLElt.attachEvent('onkeydown', onKeydown);
+		}
+		
 	}
 
-}
+	function initSymbols(target){
 
-function onKeydown(event){
-	//enter/left/right
-    var forbidden = [13, 39, 37];
-    var forbiddenKey = false;
-    
-    for(var i = 0; i < forbidden.length; i++){
-    	if(forbidden[i] == event.keyCode){
-    		forbiddenKey = true;
-    		break;
-    	}
-    }
+		for(var i in _typer.symbols){
+			_typer.symbols[i] = new Symbol(_typer.symbols[i], target, i);
+		}
 
-	_filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
-}
-
-function onKeyup(event){
-
-	if(_filterKeyDown){
-		return;
-	}
-	
-	var targetElt = _IE ? event.srcElement : event.target;
-
-	if(!(_target instanceof Target)){
-		_target = new Target(targetElt);
 	}
 
-	_target.event = event;
+	function onKeydown(event){
+		//enter/left/right
+	    var forbidden = [13, 39, 37];
+	    var forbiddenKey = false;
+	    
+	    for(var i = 0; i < forbidden.length; i++){
+	    	if(forbidden[i] == event.keyCode){
+	    		forbiddenKey = true;
+	    		break;
+	    	}
+	    }
 
-	_target.insertSymbols(_typer.symbols);
+		_filterKeyDown = forbiddenKey || event.ctrlKey || event.metaKey;
+	}
 
-   	if(typeof _typer.onTyped == 'function'){
-   		var result = _target.getStatus();
+	function onKeyup(event){
 
-   		_typer.onTyped(result, event);
-   	}
-}
+		if(_filterKeyDown){
+			return;
+		}
+		
+		var targetElt = _IE ? event.srcElement : event.target;
+
+		if(!(_target instanceof Target)){
+			_target = new Target(targetElt);
+		}
+
+		_target.event = event;
+
+		_target.insertSymbols(_typer.symbols);
+
+	   	if(typeof _typer.onTyped == 'function'){
+	   		var result = _target.getStatus();
+
+	   		_typer.onTyped(result, event);
+	   	}
+	}
 
 }
 /* src/typer.js ends. */

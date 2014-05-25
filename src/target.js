@@ -1,6 +1,6 @@
 function Target(elt){
 	var _HTMLElt = elt;
-	var _caret = new Caret(elt);
+	var _caret = new Caret();
 	var _diffChar;
 	var _symbols;
 
@@ -107,7 +107,8 @@ function Target(elt){
 	};
 	
 	this.setValue = function setValue(text){
-		var caretPos = _caret.getPosition();
+		var caretPos = _caret.getPosition(_HTMLElt);
+
 		var pos = caretPos.value + _diffChar;
 
 		if(this.isContentEditable){
@@ -116,7 +117,9 @@ function Target(elt){
 			_HTMLElt.value = text;
 		}
 
-		_caret.setPosition(pos, caretPos.path);
+		//_caret.setPosition(pos, caretPos.path);
+
+		_caret.setPosition(1, _HTMLElt);
 	};
 
 	this.getValue = function getValue(){
