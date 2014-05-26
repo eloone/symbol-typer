@@ -431,7 +431,7 @@ function Target(elt, symbols){
 	var _caret = new Caret();
 	var _diffChar;
 	var _symbols = symbols;
-console.log(_caret);
+
 	this.node = elt;
 
 	this.insertSymbols = function insertSymbols(){
@@ -446,6 +446,7 @@ console.log(_caret);
 			if(symbol.matched){
 				_diffChar = symbol.textInserted.length - symbol.typed.length
 				this.setValue(newText);
+				break;
 			}
 		}
 
@@ -654,11 +655,11 @@ function Typer(HTMLElt, symbols, onTyped){
 function symbolTyper(HTMLElt, symbols, onTyped){
 
 	if(typeof HTMLElt == 'undefined'){
-		utils.throwError('Argument 0 is missing. It must be an HTML Element or a collection of HTML elements.');
+		utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection of HTML elements.');
 	}
 
 	if(typeof symbols !== 'object'){
-		utils.throwError('Argument 1 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
+		utils.throwError('Argument 2 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
 	}
 
 	if(typeof HTMLElt.length == 'undefined'){

@@ -3,7 +3,7 @@ function Target(elt, symbols){
 	var _caret = new Caret();
 	var _diffChar;
 	var _symbols = symbols;
-console.log(_caret);
+
 	this.node = elt;
 
 	this.insertSymbols = function insertSymbols(){
@@ -18,6 +18,7 @@ console.log(_caret);
 			if(symbol.matched){
 				_diffChar = symbol.textInserted.length - symbol.typed.length
 				this.setValue(newText);
+				break;
 			}
 		}
 

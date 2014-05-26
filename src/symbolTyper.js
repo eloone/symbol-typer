@@ -1,11 +1,11 @@
 function symbolTyper(HTMLElt, symbols, onTyped){
 
 	if(typeof HTMLElt == 'undefined'){
-		utils.throwError('Argument 0 is missing. It must be an HTML Element or a collection of HTML elements.');
+		utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection of HTML elements.');
 	}
 
 	if(typeof symbols !== 'object'){
-		utils.throwError('Argument 1 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
+		utils.throwError('Argument 2 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
 	}
 
 	if(typeof HTMLElt.length == 'undefined'){
