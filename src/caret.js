@@ -8,7 +8,7 @@
 	}
 	
 	if(window.attachEvent){
-		window.attachEvent('load', init);
+		window.attachEvent('onload', init);
 	}
 	
 	function init(){

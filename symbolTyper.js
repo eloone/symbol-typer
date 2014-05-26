@@ -1,4 +1,4 @@
-/* symbolTyper - v0.1.0 - 2014-05-26 */
+/* symbolTyper - v0.1.0 - 2014-05-27 */
 (function(window){
 /* src/utils.js begins : */
 var tmp = document.createElement('p');
@@ -201,7 +201,7 @@ Symbol.prototype = {
 	}
 	
 	if(window.attachEvent){
-		window.attachEvent('load', init);
+		window.attachEvent('onload', init);
 	}
 	
 	function init(){
