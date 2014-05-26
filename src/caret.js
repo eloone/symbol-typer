@@ -146,7 +146,7 @@ function _setPositionElement(pos){
         var range = document.createRange();//Create a range (a range is a like the selection but invisible)
         range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
         range.setEnd(endContainer, pos);
-        range.collapse();//collapse the range to the end point. false means collapse to end rather than the start
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
         selection = window.getSelection();//get the selection object (allows you to change selection)
         selection.removeAllRanges();//remove any selections already made
         selection.addRange(range);
