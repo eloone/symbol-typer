@@ -65,6 +65,12 @@ htmlTrim : function htmlTrim(text){
 },
 
 throwError :  throwError,
+
+displayError : function(error){
+	if(console && console.error){
+		console.error(error.message);
+	}
+},
 //this clones objects formatted like the expected format
 //arrays values are also cloned
 clone : function clone(obj){
@@ -99,7 +105,7 @@ clone : function clone(obj){
 };
 
 function throwError(message){
-	throw new Error('symbolTyper : '+message);
+	throw new Error('symbolTyper stopped : '+message);
 }
 /* src/utils.js ends. */
 
@@ -642,34 +648,42 @@ function Typer(HTMLElt, symbols, onTyped){
 /* src/symbolTyper.js begins : */
 /* This launches the symbolTyper library */
 function symbolTyper(HTMLElt, symbols, onTyped){
-	utils.IEFix();
-	
-	if(utils.browserIsSupported() === false){
-		throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
-	}
 
-	if(typeof HTMLElt == 'undefined'){
-		utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection of HTML elements.');
-	}
+	try{
 
-	if(typeof symbols !== 'object'){
-		utils.throwError('Argument 2 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
-	}
+		utils.IEFix();
 
-	if(typeof HTMLElt.length == 'undefined'){
-		utils.checkHtmlElt(HTMLElt, 0);
-		return new Typer(HTMLElt, symbols, onTyped);
-	}else{
-		var res = {};	
-
-		for(var i = 0; i < HTMLElt.length; i++){
-			utils.checkHtmlElt(HTMLElt[i], i);
-			HTMLElt[i].id = HTMLElt[i].id || 'symbol_typer_'+i;
-			res[HTMLElt[i].id] = new Typer(HTMLElt[i], symbols, onTyped);
+		if(utils.browserIsSupported() === false){
+			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
 		}
 
-		return res;
-	} 
+		if(typeof HTMLElt == 'undefined'){
+			utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection of HTML elements.');
+		}
+	
+		if(typeof symbols !== 'object'){
+			utils.throwError('Argument 2 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
+		}
+
+		if(typeof HTMLElt.length == 'undefined'){
+			utils.checkHtmlElt(HTMLElt, 0);
+			return new Typer(HTMLElt, symbols, onTyped);
+		}else{
+			var res = {};	
+
+			for(var i = 0; i < HTMLElt.length; i++){
+				utils.checkHtmlElt(HTMLElt[i], i);
+				HTMLElt[i].id = HTMLElt[i].id || 'symbol_typer_'+i;
+				res[HTMLElt[i].id] = new Typer(HTMLElt[i], symbols, onTyped);
+			}
+
+			return res;
+		}
+		
+	}catch(e){
+		//this will display known errors that prevent the library from working but doesn't block the other existing scripts
+		utils.displayError(e);
+	}
 
 }
 /* src/symbolTyper.js ends. */

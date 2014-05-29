@@ -58,6 +58,12 @@ htmlTrim : function htmlTrim(text){
 },
 
 throwError :  throwError,
+
+displayError : function(error){
+	if(console && console.error){
+		console.error(error.message);
+	}
+},
 //this clones objects formatted like the expected format
 //arrays values are also cloned
 clone : function clone(obj){
@@ -92,5 +98,5 @@ clone : function clone(obj){
 };
 
 function throwError(message){
-	throw new Error('symbolTyper : '+message);
+	throw new Error('symbolTyper stopped : '+message);
 }
