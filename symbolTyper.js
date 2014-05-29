@@ -1,14 +1,18 @@
-/* symbolTyper - v0.1.0 - 2014-05-29 */
+/*
+Elodie Rafalimanana Copyright 2014 - BSD License 
+I dedicate this script to the fans of the Wingdings font, something to remember our childhood.
+symbolTyper - v0.1.0 - 2014-05-29
+*/
 (function(window){
 /* src/utils.js begins : */
-/*Utils provides all the function helpers that the script needs*/
+/* Utils provides all the function helpers that the script needs */
 var tmp = document.createElement('p');
 var input = document.createElement('input');
 var utils = {
 
 checkHtmlElt : function checkHtmlElt(HTMLElt, i){
 	if( !HTMLElt || HTMLElt.nodeType !== 1){
-		throw new Error('symbolTyper : Input '+i+' is not an HTML Element');
+		throwError('Input '+i+' is not an HTML Element.');
 	}
 },
 
@@ -100,7 +104,7 @@ function throwError(message){
 /* src/utils.js ends. */
 
 /* src/symbol.js begins : */
-/*Symbol represents a symbol element from the plugin input augmented with meta data*/
+/* Symbol represents a symbol element from the plugin input augmented with meta data */
 function Symbol(symbol, target, key){
 
 	this.validateRequiredKeys(symbol, key);
@@ -213,7 +217,7 @@ Symbol.prototype = {
 /* src/caret.js begins : */
 /*
 Caret is an external library to position the caret after inserting a symbol at the insert position
-Support : IE9+ and html5 browser
+Support : IE9+ and html5 browsers
 */
 (function(window){
 
@@ -410,9 +414,7 @@ window.Caret = Caret;
 /* src/caret.js ends. */
 
 /* src/target.js begins : */
-/*
-Target represents the editable HTML element : contenteditable, input or textarea
-*/
+/* Target represents the editable HTML element : contenteditable, input or textarea */
 function Target(elt, symbols){
 	var _HTMLElt = elt;
 	var _caret = new Caret();
@@ -551,7 +553,7 @@ function Target(elt, symbols){
 /* src/target.js ends. */
 
 /* src/typer.js begins : */
-/*Typer takes care of binding keyboard events to the symbol replacing process in Target*/
+/* Typer takes care of binding keyboard events to the symbol replacing process in Target */
 function Typer(HTMLElt, symbols, onTyped){
 	var _typer = this;
 	var _filterKeyDown = false;
@@ -638,7 +640,7 @@ function Typer(HTMLElt, symbols, onTyped){
 /* src/typer.js ends. */
 
 /* src/symbolTyper.js begins : */
-/*This launches the script*/
+/* This launches the symbolTyper library */
 function symbolTyper(HTMLElt, symbols, onTyped){
 	utils.IEFix();
 	

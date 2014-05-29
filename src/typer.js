@@ -1,4 +1,4 @@
-/*Typer takes care of binding keyboard events to the symbol replacing process in Target*/
+/* Typer takes care of binding keyboard events to the symbol replacing process in Target */
 function Typer(HTMLElt, symbols, onTyped){
 	var _typer = this;
 	var _filterKeyDown = false;

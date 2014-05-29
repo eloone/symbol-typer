@@ -1,4 +1,4 @@
-/*Symbol represents a symbol element from the plugin input augmented with meta data*/
+/* Symbol represents a symbol element from the plugin input augmented with meta data */
 function Symbol(symbol, target, key){
 
 	this.validateRequiredKeys(symbol, key);

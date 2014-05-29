@@ -1,6 +1,4 @@
-/*
-Target represents the editable HTML element : contenteditable, input or textarea
-*/
+/* Target represents the editable HTML element : contenteditable, input or textarea */
 function Target(elt, symbols){
 	var _HTMLElt = elt;
 	var _caret = new Caret();

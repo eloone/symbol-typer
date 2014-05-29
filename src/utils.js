@@ -1,11 +1,11 @@
-/*Utils provides all the function helpers that the script needs*/
+/* Utils provides all the function helpers that the script needs */
 var tmp = document.createElement('p');
 var input = document.createElement('input');
 var utils = {
 
 checkHtmlElt : function checkHtmlElt(HTMLElt, i){
 	if( !HTMLElt || HTMLElt.nodeType !== 1){
-		throw new Error('symbolTyper : Input '+i+' is not an HTML Element');
+		throwError('Input '+i+' is not an HTML Element.');
 	}
 },
 

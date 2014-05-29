@@ -1,6 +1,6 @@
 /*
 Caret is an external library to position the caret after inserting a symbol at the insert position
-Support : IE9+ and html5 browser
+Support : IE9+ and html5 browsers
 */
 (function(window){
 

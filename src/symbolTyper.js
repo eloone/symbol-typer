@@ -1,4 +1,4 @@
-/*This launches the script*/
+/* This launches the symbolTyper library */
 function symbolTyper(HTMLElt, symbols, onTyped){
 	utils.IEFix();
 	

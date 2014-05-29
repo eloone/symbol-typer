@@ -1,4 +1,7 @@
 {
+  "author" : "Elodie Rafalimanana",
+  "license" : "Copyright 2014 - BSD License",
+  "signature" : "I dedicate this script to the fans of the Wingdings font, something to remember our childhood.",
   "name": "symbolTyper",
   "version": "0.1.0",
   "devDependencies": {
