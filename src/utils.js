@@ -48,13 +48,15 @@ IEFix : function IEFix(){
 	}
 },
 
+browserIsSupported : function(){
+	return (typeof tmp.textContent !== 'undefined');
+},
+
 htmlTrim : function htmlTrim(text){
 	return text.replace(/^\s+|\s+$|&nbsp;/g, '');
 },
 
-throwError : function throwError(message){
-	throw new Error('symbolTyper : '+message);
-},
+throwError :  throwError,
 
 clone : function clone(obj){
 	var newObj = {};
@@ -86,3 +88,7 @@ clone : function clone(obj){
 }
 
 };
+
+function throwError(message){
+	throw new Error('symbolTyper : '+message);
+}

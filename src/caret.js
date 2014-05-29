@@ -1,6 +1,6 @@
 (function(window){
 
-	var html5;
+	var supported;
 	var ie;
 	
 	if(window.addEventListener){
@@ -12,8 +12,11 @@
 	}
 	
 	function init(){
-		html5 = (window.getSelection && document.createRange);//Modern Browsers 
-		ie = (document.selection && document.body.createTextRange);//<IE9
+		supported = typeof (window.getSelection && document.createRange) !== 'undefined';//Modern Browsers and IE9+
+		
+		if(supported === false){
+			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
+		}
 	}
 
 	function Target(target){
@@ -46,7 +49,7 @@
 			this.target = new Target(target);
 
 			if(this.target.isText()){
-				throw new Error('Caret can get the caret\'s position only from editable HTML Elements. "'+this.target.node+'" is not editable.');
+				throwError('Caret can get the caret\'s position only from editable HTML Elements. "'+this.target.node+'" is not editable.');
 			}
 
 			if(this.target.isContentEditable()){
@@ -58,7 +61,7 @@
 	
 		setPosition : function(pos, endContainer){
 			if(pos && !endContainer){
-				throw new Error('Caret : Argument 2 "'+endContainer+'" is invalid. It must be the HTML Element where to position the caret or a PositionPath.');
+				throwError('Argument 2 "'+endContainer+'" is invalid. It must be the HTML Element where to position the caret or a PositionPath.');
 			}
 
 			if(endContainer instanceof PositionPath){
@@ -81,56 +84,24 @@ function _getPositionContentEditable(){
 
 	this.target.node.focus();
 
-	if(html5){
-		var range = window.getSelection().getRangeAt(0);
+	var range = window.getSelection().getRangeAt(0);
 
-      		return {
-      			value : range.endOffset,
-      			path : new PositionPath(this.target.node, range.endContainer),
-      			container : range.endContainer
-      		};
-	}
-
-	if(ie){
-        var range1 = document.selection.createRange(),
-            range2 = document.body.createTextRange();
-        
-        range2.moveToElementText(range1.parentElement());
-        range2.setEndPoint('EndToEnd', range1);
-        
-        return {
-        	value : range2.text.length,
-        	path : new PositionPath(this.target.node, range1.parentElement()),
-        	container : range1.parentElement()
-        };
-	}
+	return {
+		value : range.endOffset,
+		path : new PositionPath(this.target.node, range.endContainer),
+		container : range.endContainer
+	};
 }
 
 function _getPositionInputTextArea(){
 	this.target.node.focus();
 	
-	if(html5){
-		return {
-			value : this.target.node.selectionStart,
-			path : new PositionPath(this.target.node, this.target.node),
-			container : this.target.node
-		};
-	}
-	
-	if(ie){
-	 var pos = 0,
-        range = this.target.node.createTextRange(),
-        range2 = document.selection.createRange().duplicate(),
-        bookmark = range2.getBookmark();
+	return {
+		value : this.target.node.selectionStart,
+		path : new PositionPath(this.target.node, this.target.node),
+		container : this.target.node
+	};
 
-        range.moveToBookmark(bookmark);
-        while (range.moveStart('character', -1) !== 0) pos++;
-        return {
-        	value : pos,
-        	path : new PositionPath(this.target.node, range.parentElement()),
-        	container : range.parentElement()
-        };
-	}
 }
 
 function _setPositionElement(pos){
@@ -140,36 +111,24 @@ function _setPositionElement(pos){
 		endContainer = this.target.node.firstChild;	
 	}
 
-    if (html5) {
-       // endContainer.focus();
-     //   window.getSelection().collapse(endContainer, pos);
-        var range = document.createRange();//Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
-        range.setEnd(endContainer, pos);
-        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-        selection = window.getSelection();//get the selection object (allows you to change selection)
-        selection.removeAllRanges();//remove any selections already made
-        selection.addRange(range);
-    }
-
-    if(ie){
-	      var range = document.body.createTextRange();
-	      range.moveToElementText(endContainer);
-	      range.moveStart('character', pos);
-	      range.collapse(true);
-	      range.select();    		
-	}
+    var range = document.createRange();//Create a range (a range is a like the selection but invisible)
+    range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
+    range.setEnd(endContainer, pos);
+    range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+    selection = window.getSelection();//get the selection object (allows you to change selection)
+    selection.removeAllRanges();//remove any selections already made
+    selection.addRange(range);
      
 }
 
 function _setPositionInputTextArea(pos){
-	if(html5){
-		this.target.node.setSelectionRange(pos, pos);
-	}
+	this.target.node.setSelectionRange(pos, pos);	
 }
 
 //utils functions
-
+function throwError(message){
+	throw new Error('Caret : '+message);
+}
 //retrieves a node in a DOM tree given a PositionPath object
 //the PositionPath object gives the path array needed to find the child node from the root node
 function getNodeByPosition(positionPath){

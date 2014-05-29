@@ -1,4 +1,7 @@
 function symbolTyper(HTMLElt, symbols, onTyped){
+	if(utils.browserIsSupported() === false){
+		throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
+	}		
 
 	if(typeof HTMLElt == 'undefined'){
 		utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection of HTML elements.');
