@@ -214,14 +214,14 @@ Symbol.prototype = {
 		supported = typeof (window.getSelection && document.createRange) !== 'undefined';//Modern Browsers and IE9+
 		
 		if(supported === false){
-			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
+			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above');
 		}
 	}
 
 	function Target(target){
 
 		if( !target || target.nodeType != 1 && target.nodeType != 3){
-			throw new Error('Caret : the target "'+target+'" must be an HTML Element or Text node');
+			throwError('The target "'+target+'" must be an HTML Element or Text node');
 		}
 
 		this.node = target;
@@ -346,32 +346,32 @@ function getNodeByPosition(positionPath){
 //[0,2,3] = child node is the 3rd child of the 2nd child of the 1st child of root node
 //this allow to find node in a DOM tree by position in a tree where nodes are not the same for DOM but the same in position 
 //for example when the tree was dynamically modified
-function PositionPath(target, textNode){
+function PositionPath(targetNode, textNode){
 	var tree = {};
 	var path = [];
 
-	path = pathFromNode(target, textNode, path);
+	path = pathFromNode(targetNode, textNode, path);
 
 	this.getTree = function(){
 		return {
-			root : target,
+			root : targetNode,
 			path : path
 		};
 	};
 }
 
 //array that locates a node in a DOM tree under a root node
-function pathFromNode(target, node, path){
+function pathFromNode(targetNode, node, path){
 
-	if(target === node || typeof node == 'undefined' || typeof node.parentElement == 'undefined'){
+	if(targetNode === node || typeof node == 'undefined' || typeof node.parentNode == 'undefined'){
 		return path;
 	}
 
-	var childIndex = getIndex(node.parentElement, node);
+	var childIndex = getIndex(node.parentNode, node);
 
 	path.unshift(childIndex);
 
-	return pathFromNode(target, node.parentElement, path);
+	return pathFromNode(targetNode, node.parentNode, path);
 
 }
 
