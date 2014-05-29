@@ -150,7 +150,7 @@ function getNodeByPosition(positionPath){
 
 //path is an array that locates a node in a DOM tree under a root node
 //[0,2,3] = child node is the 3rd child of the 2nd child of the 1st child of root node
-//this allow to find node in a DOM tree by position in a tree where nodes are not the same for DOM but the same in position 
+//this allows to find node in a DOM tree by position in a tree where nodes are not the same for DOM but the same in position 
 //for example when the tree was dynamically modified
 function PositionPath(targetNode, textNode){
 	var tree = {};

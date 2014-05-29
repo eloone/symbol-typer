@@ -1,6 +1,6 @@
 /*
 Elodie Rafalimanana Copyright 2014 - BSD License 
-I dedicate this script to the fans of the Wingdings font, something to remember our childhood.
+I dedicate this script to the fans of the Wingdings font, something to reminisce about our childhood.
 symbolTyper - v0.1.0 - 2014-05-29
 */
 (function(window){
@@ -373,7 +373,7 @@ function getNodeByPosition(positionPath){
 
 //path is an array that locates a node in a DOM tree under a root node
 //[0,2,3] = child node is the 3rd child of the 2nd child of the 1st child of root node
-//this allow to find node in a DOM tree by position in a tree where nodes are not the same for DOM but the same in position 
+//this allows to find node in a DOM tree by position in a tree where nodes are not the same for DOM but the same in position 
 //for example when the tree was dynamically modified
 function PositionPath(targetNode, textNode){
 	var tree = {};
@@ -646,7 +646,7 @@ function Typer(HTMLElt, symbols, onTyped){
 /* src/typer.js ends. */
 
 /* src/symbolTyper.js begins : */
-/* This launches the symbolTyper library */
+/* This is where the symbolTyper library starts */
 function symbolTyper(HTMLElt, symbols, onTyped){
 
 	try{
@@ -679,7 +679,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 
 			return res;
 		}
-		
+
 	}catch(e){
 		//this will display known errors that prevent the library from working but doesn't block the other existing scripts
 		utils.displayError(e);

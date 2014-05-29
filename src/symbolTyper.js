@@ -1,4 +1,4 @@
-/* This launches the symbolTyper library */
+/* This is where the symbolTyper library starts */
 function symbolTyper(HTMLElt, symbols, onTyped){
 
 	try{
@@ -31,7 +31,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 
 			return res;
 		}
-		
+
 	}catch(e){
 		//this will display known errors that prevent the library from working but doesn't block the other existing scripts
 		utils.displayError(e);
