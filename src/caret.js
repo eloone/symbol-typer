@@ -1,7 +1,10 @@
+/*
+Caret is an external library to position the caret after inserting a symbol at the insert position
+Support : IE9+ and html5 browser
+*/
 (function(window){
 
 	var supported;
-	var ie;
 	
 	if(window.addEventListener){
 		window.addEventListener('load', init);
@@ -15,7 +18,7 @@
 		supported = typeof (window.getSelection && document.createRange) !== 'undefined';//Modern Browsers and IE9+
 		
 		if(supported === false){
-			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above');
+			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
 		}
 	}
 
@@ -104,6 +107,7 @@ function _getPositionInputTextArea(){
 
 }
 
+//sets the caret position in text node or html editable element
 function _setPositionElement(pos){
 	var endContainer = this.target.node;
 	
@@ -111,12 +115,13 @@ function _setPositionElement(pos){
 		endContainer = this.target.node.firstChild;	
 	}
 
-    var range = document.createRange();//Create a range (a range is a like the selection but invisible)
-    range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
+    var range = document.createRange();
+
+    range.selectNodeContents(endContainer);
     range.setEnd(endContainer, pos);
-    range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-    selection = window.getSelection();//get the selection object (allows you to change selection)
-    selection.removeAllRanges();//remove any selections already made
+    range.collapse(false);
+    selection = window.getSelection();
+    selection.removeAllRanges();
     selection.addRange(range);
      
 }

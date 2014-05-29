@@ -1,13 +1,13 @@
+/*Typer takes care of binding keyboard events to the symbol replacing process in Target*/
 function Typer(HTMLElt, symbols, onTyped){
 	var _typer = this;
 	var _filterKeyDown = false;
 	var _IE = false;
 	
+	//symbols are cloned per instance to avoid mixing objects between instances since object are only references
 	_typer.symbols = utils.clone(symbols);
 
 	_typer.onTyped = onTyped;
-
-	utils.IEFix();
 
 	enableSymbols(HTMLElt);
 
@@ -61,7 +61,7 @@ function Typer(HTMLElt, symbols, onTyped){
 	}
 
 	function onKeyup(event){
-
+		//no symbol activity for those keys
 		if(_filterKeyDown){
 			return;
 		}
@@ -71,8 +71,6 @@ function Typer(HTMLElt, symbols, onTyped){
 		if(targetElt !== _target.node){
 			_target = new Target(targetElt, _typer.symbols);
 		}
-
-		_target.event = event;
 
 		_target.insertSymbols();
 

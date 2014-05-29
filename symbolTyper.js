@@ -1,6 +1,7 @@
 /* symbolTyper - v0.1.0 - 2014-05-29 */
 (function(window){
 /* src/utils.js begins : */
+/*Utils provides all the function helpers that the script needs*/
 var tmp = document.createElement('p');
 var input = document.createElement('input');
 var utils = {
@@ -60,17 +61,18 @@ htmlTrim : function htmlTrim(text){
 },
 
 throwError :  throwError,
-
+//this clones objects formatted like the expected format
+//arrays values are also cloned
 clone : function clone(obj){
 	var newObj = {};
-	var notObj = true;
+	var valueIsObj = false;
 
 	for(var k in obj){
 		newObj[k] = {};
 
 		for(var i in obj[k]){
 			if(typeof obj[k][i] != 'undefined'){
-				notObj = false;
+				valueIsObj = true;
 				if(typeof obj[k][i].slice == 'function'){
 					newObj[k][i] = obj[k][i].slice(0);
 				}else{
@@ -80,7 +82,7 @@ clone : function clone(obj){
 			}
 		}
 
-		if(notObj){
+		if(!valueIsObj){
 			newObj[k] = obj[k];
 		}
 
@@ -98,14 +100,17 @@ function throwError(message){
 /* src/utils.js ends. */
 
 /* src/symbol.js begins : */
+/*Symbol represents a symbol element from the plugin input augmented with meta data*/
 function Symbol(symbol, target, key){
+
+	this.validateRequiredKeys(symbol, key);
 
 	symbol.key = key;
 
 	symbol.pattern = this.getPattern(symbol.replaced, target);
 
-	this.validate(symbol, key);
-	//power hack to insert a unicode as html entity in an input via javascript
+	this.validateOptionalKeys(symbol, key);
+	//power hack to insert a unicode as html reference in an input via javascript
 	symbol.htmlSymbol = utils.convertToHtml(symbol.unicode);
 
 	symbol.encoded = encodeURIComponent(utils.htmlTrim(symbol.htmlSymbol));
@@ -126,6 +131,7 @@ function formatSeparator(separator, target){
 		return '';
 	}else{
 		if(utils.isContentEditable(target)){
+			//editable elements systematically trim end space
 			var sep = separator.replace(/^\s+|\s+$/g, '&nbsp;');
 			return utils.convertToHtml(sep);
 		}
@@ -136,36 +142,44 @@ function formatSeparator(separator, target){
 
 Symbol.prototype = {
 	//controls the input of the plugin
-	validate : function validate(symbol, key){
+	//required : unicode, replaced
+	validateRequiredKeys : function validateRequiredKeys(symbol, key){
 		if(typeof symbol.unicode == 'undefined'){
-			utils.throwError('Missing {unicode} property in the {'+key+'} symbol object');
+			utils.throwError('The property {unicode} is missing from the {'+key+'} symbol object. It must be a String like &#173; (decimal) or &#xf007; (hexadecimal).');
 		}
 
 		if(typeof symbol.replaced == 'undefined'){
-			utils.throwError('Missing {replaced} property in the {'+key+'} symbol object');
+			utils.throwError('The property {replaced} is missing from the {'+key+'} symbol object. It must be a String or an Array of strings.');
 		}
 
 		var unicodeRegex = /^(&#x[a-fA-F0-9]+|&#\d+);$/;
 
 		if(unicodeRegex.test(symbol.unicode) === false){
-			utils.throwError('This unicode format "'+symbol.unicode+'" is invalid. It must be like &#173; (decimal) or &#xf007; (hexadecimal)');
+			utils.throwError('This unicode format "'+symbol.unicode+'" is invalid. It must be like &#173; (decimal) or &#xf007; (hexadecimal).');
 		}
 
 		if(typeof symbol.replaced !== 'string' && typeof symbol.replaced.push !== 'function'){
-			utils.throwError('{replaced} property in {'+key+'} symbol must be a String or an Array of strings');
+			utils.throwError('The {replaced} property in {'+key+'} symbol must be a String or an Array of strings.');
 		}
-
+	},
+	//optional : limit, before, after
+	validateOptionalKeys : function validateOptionalKeys(symbol, key){
+		
 		var replacedRegex = new RegExp(symbol.pattern, 'g');
+
+		if(symbol.limit && typeof symbol.limit !== 'number'){
+			utils.throwError('The property {limit} must be a number in the {'+key+'} symbol.');
+		}
 
 		if(symbol.before){
 			if(replacedRegex.test(symbol.before)){
-				utils.throwError('{before} separator "'+symbol.before+'" in {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+				utils.throwError('{before} separator "'+symbol.before+'" in the {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
 			}
 		}
 
 		if(symbol.after){
 			if(replacedRegex.test(symbol.after)){
-				utils.throwError('{after} separator "'+symbol.after+'" in {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+				utils.throwError('{after} separator "'+symbol.after+'" in the {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
 			}
 		}
 	},
@@ -197,10 +211,13 @@ Symbol.prototype = {
 /* src/symbol.js ends. */
 
 /* src/caret.js begins : */
+/*
+Caret is an external library to position the caret after inserting a symbol at the insert position
+Support : IE9+ and html5 browser
+*/
 (function(window){
 
 	var supported;
-	var ie;
 	
 	if(window.addEventListener){
 		window.addEventListener('load', init);
@@ -214,7 +231,7 @@ Symbol.prototype = {
 		supported = typeof (window.getSelection && document.createRange) !== 'undefined';//Modern Browsers and IE9+
 		
 		if(supported === false){
-			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above');
+			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
 		}
 	}
 
@@ -303,6 +320,7 @@ function _getPositionInputTextArea(){
 
 }
 
+//sets the caret position in text node or html editable element
 function _setPositionElement(pos){
 	var endContainer = this.target.node;
 	
@@ -310,12 +328,13 @@ function _setPositionElement(pos){
 		endContainer = this.target.node.firstChild;	
 	}
 
-    var range = document.createRange();//Create a range (a range is a like the selection but invisible)
-    range.selectNodeContents(endContainer);//Select the entire contents of the element with the range
+    var range = document.createRange();
+
+    range.selectNodeContents(endContainer);
     range.setEnd(endContainer, pos);
-    range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-    selection = window.getSelection();//get the selection object (allows you to change selection)
-    selection.removeAllRanges();//remove any selections already made
+    range.collapse(false);
+    selection = window.getSelection();
+    selection.removeAllRanges();
     selection.addRange(range);
      
 }
@@ -391,6 +410,9 @@ window.Caret = Caret;
 /* src/caret.js ends. */
 
 /* src/target.js begins : */
+/*
+Target represents the editable HTML element : contenteditable, input or textarea
+*/
 function Target(elt, symbols){
 	var _HTMLElt = elt;
 	var _caret = new Caret();
@@ -471,6 +493,7 @@ function Target(elt, symbols){
 		return res;
 	};
 	
+	//gets the count of symbols, and text entered in target
 	this.getStatus = function getStatus(){
 		var text = this.getValue();
 		var res = { count : {}};
@@ -528,16 +551,16 @@ function Target(elt, symbols){
 /* src/target.js ends. */
 
 /* src/typer.js begins : */
+/*Typer takes care of binding keyboard events to the symbol replacing process in Target*/
 function Typer(HTMLElt, symbols, onTyped){
 	var _typer = this;
 	var _filterKeyDown = false;
 	var _IE = false;
 	
+	//symbols are cloned per instance to avoid mixing objects between instances since object are only references
 	_typer.symbols = utils.clone(symbols);
 
 	_typer.onTyped = onTyped;
-
-	utils.IEFix();
 
 	enableSymbols(HTMLElt);
 
@@ -591,7 +614,7 @@ function Typer(HTMLElt, symbols, onTyped){
 	}
 
 	function onKeyup(event){
-
+		//no symbol activity for those keys
 		if(_filterKeyDown){
 			return;
 		}
@@ -601,8 +624,6 @@ function Typer(HTMLElt, symbols, onTyped){
 		if(targetElt !== _target.node){
 			_target = new Target(targetElt, _typer.symbols);
 		}
-
-		_target.event = event;
 
 		_target.insertSymbols();
 
@@ -617,10 +638,13 @@ function Typer(HTMLElt, symbols, onTyped){
 /* src/typer.js ends. */
 
 /* src/symbolTyper.js begins : */
+/*This launches the script*/
 function symbolTyper(HTMLElt, symbols, onTyped){
+	utils.IEFix();
+	
 	if(utils.browserIsSupported() === false){
 		throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
-	}		
+	}
 
 	if(typeof HTMLElt == 'undefined'){
 		utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection of HTML elements.');

@@ -1,3 +1,4 @@
+/*Utils provides all the function helpers that the script needs*/
 var tmp = document.createElement('p');
 var input = document.createElement('input');
 var utils = {
@@ -57,17 +58,18 @@ htmlTrim : function htmlTrim(text){
 },
 
 throwError :  throwError,
-
+//this clones objects formatted like the expected format
+//arrays values are also cloned
 clone : function clone(obj){
 	var newObj = {};
-	var notObj = true;
+	var valueIsObj = false;
 
 	for(var k in obj){
 		newObj[k] = {};
 
 		for(var i in obj[k]){
 			if(typeof obj[k][i] != 'undefined'){
-				notObj = false;
+				valueIsObj = true;
 				if(typeof obj[k][i].slice == 'function'){
 					newObj[k][i] = obj[k][i].slice(0);
 				}else{
@@ -77,7 +79,7 @@ clone : function clone(obj){
 			}
 		}
 
-		if(notObj){
+		if(!valueIsObj){
 			newObj[k] = obj[k];
 		}
 
