@@ -61,24 +61,29 @@ function Typer(HTMLElt, symbols, onTyped){
 	}
 
 	function onKeyup(event){
-		//no symbol activity for those keys
-		if(_filterKeyDown){
-			return;
-		}
-		
-		var targetElt = _IE ? event.srcElement : event.target;
+		try{
+			//no symbol activity for those keys
+			if(_filterKeyDown){
+				return;
+			}
+			
+			var targetElt = _IE ? event.srcElement : event.target;
 
-		if(targetElt !== _target.node){
-			_target = new Target(targetElt, _typer.symbols);
-		}
+			if(targetElt !== _target.node){
+				_target = new Target(targetElt, _typer.symbols);
+			}
 
-		_target.insertSymbols();
+			_target.insertSymbols();
 
-	   	if(typeof _typer.onTyped == 'function'){
-	   		var result = _target.getStatus();
+		   	if(typeof _typer.onTyped == 'function'){
+		   		var result = _target.getStatus();
 
-	   		_typer.onTyped(result, event);
-	   	}
+		   		_typer.onTyped(result, event);
+		   	}
+	   }
+	   catch(e){
+	   		utils.displayError(e);
+	   }
 	}
 
 }

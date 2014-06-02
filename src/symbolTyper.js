@@ -3,14 +3,16 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 
 	try{
 
+		var elements = [];
+
 		utils.IEFix();
 
 		if(utils.browserIsSupported() === false){
-			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
+			utils.throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
 		}
 
 		if(typeof HTMLElt == 'undefined'){
-			utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection of HTML elements.');
+			utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection (array or NodeList) of HTML elements.');
 		}
 	
 		if(typeof symbols !== 'object'){
@@ -18,19 +20,31 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 		}
 
 		if(typeof HTMLElt.length == 'undefined'){
-			utils.checkHtmlElt(HTMLElt, 0);
-			return new Typer(HTMLElt, symbols, onTyped);
+			elements.push(HTMLElt);
 		}else{
-			var res = {};	
-
-			for(var i = 0; i < HTMLElt.length; i++){
-				utils.checkHtmlElt(HTMLElt[i], i);
-				HTMLElt[i].id = HTMLElt[i].id || 'symbol_typer_'+i;
-				res[HTMLElt[i].id] = new Typer(HTMLElt[i], symbols, onTyped);
-			}
-
-			return res;
+			elements = HTMLElt;
 		}
+
+		var res = {}, i = 0;	
+
+		do{
+			utils.checkHtmlElt(elements[i], i);
+			elements[i].id = elements[i].id || 'symbol_typer_'+i;
+			res[elements[i].id] = new Typer(elements[i], symbols, onTyped);
+			i++;
+		}while(i < elements.length);
+
+		//if only one element we enable direct access to the typer without the id key
+		//but access through the id key will still work
+		//memory cost is low since keys with object value are only references to the object
+		if(i == 1){
+			for(var k in res){
+				res[k][k] = res[k];
+				res = res[k];
+			}
+		}
+
+		return res;	
 
 	}catch(e){
 		//this will display known errors that prevent the library from working but doesn't block the other existing scripts

@@ -1,0 +1,3 @@
+window.symbolTyper = symbolTyper;
+
+}(this));

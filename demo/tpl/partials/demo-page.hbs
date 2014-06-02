@@ -1,0 +1,34 @@
+<header>
+	Type the following texts in the editable elements below, they should be replaced by their symbols according to this table :
+	{{> symbol-table}}
+</header>
+
+<p class="title">Input element :</p>
+<button class="grouped" data-id="input">console.log the status</button>
+<br/>
+<input class="editable" value="" id="input" type="text" placeholder="Type your symbols here."/>
+
+<p class="title">Textarea element :</p>
+<button class="grouped" data-id="textarea">console.log the status</button>
+<br/>
+<textarea class="editable" id="textarea">Type your symbols here.</textarea>
+
+<p class="title">Content editable element :</p>
+<button class="grouped" data-id="inputDiv">console.log the status</button>
+<div id="inputDiv" class="input editable" contenteditable="true">Type your<br>symbols here.</div>
+
+<p class="title">Single input element :</p>
+<button class="single" data-id="single_input">console.log the status</button>
+<br/>
+<input value="" id="single_input" type="text" placeholder="Type your symbols here."/>
+
+<div class="count">
+	<p class="title">Active status :</p>
+	<div id="active_status" >
+		Start typing symbols to see something changing here.
+	</div>
+</div>
+
+{{> status}}
+
+{{> symbol-rows}}

@@ -17,6 +17,7 @@ function Symbol(symbol, target, key){
 
 	symbol.after = formatSeparator(symbol.after, target);
 
+	//inserted is html
 	symbol.inserted = symbol.before+symbol.htmlSymbol+symbol.after;
 
 	symbol.textInserted = utils.convertToText(symbol.inserted);

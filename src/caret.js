@@ -92,7 +92,10 @@ function _getPositionContentEditable(){
 	return {
 		value : range.endOffset,
 		path : new PositionPath(this.target.node, range.endContainer),
-		container : range.endContainer
+		container : range.endContainer,
+		//range.endContainer is a text node
+		//the text that contains the caret
+		textContainer : range.endContainer.nodeValue || ''
 	};
 }
 
@@ -102,7 +105,10 @@ function _getPositionInputTextArea(){
 	return {
 		value : this.target.node.selectionStart,
 		path : new PositionPath(this.target.node, this.target.node),
-		container : this.target.node
+		container : this.target.node,
+		//this.target.node is textarea or input
+		//the text that contains the caret
+		textContainer : this.target.node.value || ''
 	};
 
 }

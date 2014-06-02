@@ -4,6 +4,7 @@ function Target(elt, symbols){
 	var _caret = new Caret();
 	var _diffChar;
 	var _symbols = symbols;
+	var _typed;
 
 	this.node = elt;
 
@@ -17,7 +18,8 @@ function Target(elt, symbols){
 			newText = this.insertSymbol(newText, symbol);
 
 			if(symbol.matched){
-				_diffChar = symbol.textInserted.length - symbol.typed.length
+				_diffChar = symbol.textInserted.length - symbol.typed.length;
+				_typed = symbol.typed;
 				this.setValue(newText);
 				break;
 			}
@@ -27,11 +29,13 @@ function Target(elt, symbols){
 
 	this.insertSymbol = function insertSymbol(text, symbol){
 		var newText = text;
+
+		var plainText = utils.convertToText(text);
 	
 		var pattern = '([^\\\\]|^)'+'('+symbol.pattern+')';
 
 		var regexp = new RegExp(pattern);
-
+ 
 		var replacedMatched = regexp.exec(newText);
 
 		symbol.typed = '';
@@ -62,17 +66,18 @@ function Target(elt, symbols){
 		return newText;
 	};
 
-	this.getSymbolCount = function(symbol, txt){	
-
+	this.getSymbolCount = function getSymbolCount(symbol, txt){
+		//in this function we deal only with plain text to avoid evaluating tags when counting symbols
 		var res = {};
-		var text = txt || utils.convertToText(this.getValue());
+		var text = utils.convertToText(txt || this.getValue());
 
 		var rawEncodedHtml = encodeURIComponent(text);
 		//get escaped replaced chars to exclude them from unreplaced count
-		var pattern = '\\\\'+symbol.pattern;
+		var pattern = '\\\\'+utils.convertToText(symbol.pattern);
 		var regexp = new RegExp(pattern, 'g');
 
 		res.symbolCount = utils.getCountChar(symbol.encoded, rawEncodedHtml);
+		//symbol.replaced is plain text chars
 		res.unreplacedCount = utils.getCountChar(symbol.replaced, text.replace(regexp, ''));
 		res.symbol = symbol.key;
 
@@ -93,7 +98,7 @@ function Target(elt, symbols){
 			var regexpEscaped = new RegExp(escapedPattern, 'g');
 			var regexpSymbol = new RegExp(symbolPattern, 'g');
 
-			res.count[key] = getCountChar(symbol.encoded, rawEncodedHtml);
+			res.count[key] = utils.getCountChar(symbol.encoded, rawEncodedHtml);
 			
 			rawEncodedHtml = rawEncodedHtml.replace(regexpSymbol, '');
 
@@ -104,15 +109,22 @@ function Target(elt, symbols){
 			rawEncodedHtml = encodeURIComponent(resText);
 		}
 		
-		res.rawText = resText;
-		res.fullText = text;
+		res.rawText = utils.convertToText(resText);
+		res.fullText = utils.convertToText(text);
+		res.targetId = this.node.id;
 
 		return res;
 	};
 	
 	this.setValue = function setValue(text){
+		//this gets executed only when a symbol was matched and needs to be inserted
 		var caretPos = _caret.getPosition(_HTMLElt);
-		var pos = caretPos.value + _diffChar;
+		//position of the typed chars to be replaced in the encontainer the caret will be repositioned in
+		var typedIndex = caretPos.textContainer.indexOf(_typed);
+		//caretPos.value <= typedIndex when you delete and unreplaced chars have to be replaced forward
+		//when we delete, it always counts as 1 char = 1 symbol
+		//when you insert caretPos.value > typedIndex
+		var pos = caretPos.value > typedIndex ? caretPos.value + _diffChar : caretPos.value;
 
 		if(this.isContentEditable){
 			_HTMLElt.innerHTML = text;

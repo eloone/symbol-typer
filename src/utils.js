@@ -5,7 +5,7 @@ var utils = {
 
 checkHtmlElt : function checkHtmlElt(HTMLElt, i){
 	if( !HTMLElt || HTMLElt.nodeType !== 1){
-		throwError('Input '+i+' is not an HTML Element.');
+		throwError('Input '+i+' : '+HTMLElt+' is not an HTML Element. \nsymbolTyper works with an HTML element or a collection (array or NodeList) of HTML elements.');
 	}
 },
 
@@ -18,6 +18,8 @@ isContentEditable : function isContentEditable(HTMLElt){
 },
 
 getCountChar : function getCountChar(char, inStr){
+	//char can be an array
+	//every char is always plain text (no html conversion)
 	if(typeof char.push == 'function'){
 		var count = 0;
 
@@ -28,7 +30,7 @@ getCountChar : function getCountChar(char, inStr){
 		return count;
 	}
 
-		return (inStr.split(char).length - 1);
+	return (inStr.split(char).length - 1);
 },
 
 convertToHtml : function convertToHtml(text){
