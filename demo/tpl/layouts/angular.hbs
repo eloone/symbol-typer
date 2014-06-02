@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html ng-app="symbolApp" lang="en">
 <head>
 <meta charset="UTF-8">
 <title>{{page.title}}</title>
 {{> common-assets}}
-{{> demo-assets}}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script> 
 <script type="text/javascript" src="{{root}}/symbolTyper.0.1.0.min.js"></script> 
-<script type="text/javascript" src="{{assets}}/js/main.js"></script>
+<script type="text/javascript" src="{{assets}}/js/main-angular.js"></script>
 {{#if development}} 
 <script src="//localhost:1300/livereload.js"></script>
 {{/if}} 

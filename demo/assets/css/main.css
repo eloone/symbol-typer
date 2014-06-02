@@ -56,3 +56,26 @@ button{
 	padding: 0;
 	margin: 0;
 }
+
+/* angular demo */
+.input-angular{
+	padding:10px;
+	border-radius:5px;
+	box-shadow: 3px 3px 3px #ddd inset;
+	border:0;
+	width:500px;
+	font-family: 'Handlee', 'FontAwesome', cursive;
+	height:50px;
+	font-size:36px;
+}
+
+.votes i{
+	font-style:normal;
+	padding:3px;
+}
+
+/* index */
+section{
+	margin: 10px 0;
+}
+

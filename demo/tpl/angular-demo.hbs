@@ -1,0 +1,47 @@
+---
+title: symbolTyper - Angular Demo
+---
+
+<div class="container" ng-controller="linesCtrl">
+		<form ng-submit="submitInput()" id="form">
+	        <input id="input" ng-model="input" class="input-angular" type="text" placeholder="Type: Friends *****"/>
+	    </form>
+		<ul class="rows">
+	    	<li ng-class-odd="odd" ng-class-even="even" ng-repeat="line in lines track by $index" class="row">
+	    		<span class="title">\{{line.title}}</span>
+	    		<p class="votes">
+	    			<i ng-repeat="vote in line.votes" class="stars" ng-class="{true: 'fa-star-o', false: 'fa-star'}[vote.empty]" ></i>
+	    		</p>
+	    	</li>
+	    	<li class="row">
+	    		<span class="title">Gilmore girls</span>
+	    		<p class="votes">
+	    			<i class="ng-scope stars fa-star"></i>
+	    			<i class="ng-scope stars fa-star"></i>
+	    			<i class="ng-scope stars fa-star"></i>
+	    			<i class="ng-scope stars fa-star"></i>
+	    			<i class="ng-scope stars fa-star-o"></i>
+	    		</p>
+	    	</li>
+	    	<li class="row">
+	    		<span class="title">Matrix</span>
+	    		<p class="votes">
+	    			<i class="stars fa-star"></i>
+	    			<i class="stars fa-star"></i>
+	    			<i class="stars fa-star"></i>
+	    			<i class="stars fa-star"></i>
+	    			<i class="stars fa-star"></i>
+	    		</p>
+	    	</li>
+	    	<li class="row">
+	    		<span class="title">Black Swan</span>
+	    		<p class="votes">
+	    			<i class="stars fa-star"></i>
+	    			<i class="stars fa-star-o"></i>
+	    			<i class="stars fa-star-o"></i>
+	    			<i class="stars fa-star-o"></i>
+	    			<i class="stars fa-star-o"></i>
+	    		</p>
+	    	</li>
+		</ul>
+	</div>

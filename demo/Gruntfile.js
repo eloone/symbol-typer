@@ -25,6 +25,22 @@ module.exports = function(grunt) {
         files: {
           '.': ['tpl/jquery-demo.hbs']
         }
+      },
+      angular : {
+        options: {
+          layout: 'tpl/layouts/angular.hbs'
+        },
+        files: {
+          '.': ['tpl/angular-demo.hbs']
+        }
+      },
+      index : {
+        options: {
+          layout: 'tpl/layouts/index.hbs'
+        },
+        files: {
+          '.': ['tpl/index.hbs']
+        }
       }
     },
     watch : {
