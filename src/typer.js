@@ -39,6 +39,8 @@ function Typer(HTMLElt, symbols, onTyped){
 
 	function initSymbols(target){
 
+		Symbol.prototype.validateFormat(_typer.symbols);
+
 		for(var i in _typer.symbols){
 			_typer.symbols[i] = new Symbol(_typer.symbols[i], target, i);
 		}

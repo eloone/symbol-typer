@@ -119,7 +119,7 @@ function Target(elt, symbols){
 	this.setValue = function setValue(text){
 		//this gets executed only when a symbol was matched and needs to be inserted
 		var caretPos = _caret.getPosition(_HTMLElt);
-		//position of the typed chars to be replaced in the encontainer the caret will be repositioned in
+		//position of the typed chars to be replaced in the endcontainer the caret will be repositioned in
 		var typedIndex = caretPos.textContainer.indexOf(_typed);
 		//caretPos.value <= typedIndex when you delete and unreplaced chars have to be replaced forward
 		//when we delete, it always counts as 1 char = 1 symbol

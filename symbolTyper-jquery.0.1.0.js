@@ -160,6 +160,7 @@ Symbol.prototype = {
 	//controls the input of the plugin
 	//required : unicode, replaced
 	validateRequiredKeys : function validateRequiredKeys(symbol, key){
+
 		if(typeof symbol.unicode == 'undefined'){
 			utils.throwError('The property {unicode} is missing from the {'+key+'} symbol object. It must be a String like &#173; (decimal) or &#xf007; (hexadecimal).');
 		}
@@ -196,6 +197,13 @@ Symbol.prototype = {
 		if(symbol.after){
 			if(replacedRegex.test(symbol.after)){
 				utils.throwError('{after} separator "'+symbol.after+'" in the {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+			}
+		}
+	},
+	validateFormat : function(symbols){
+		for(var i in symbols){
+			if(typeof symbols[i] != 'object'){
+				utils.throwError('The format of the symbols object must be like {hearts : {unicode : \"&#173;\", replaced : \"<3\"}}');
 			}
 		}
 	},
@@ -553,7 +561,7 @@ function Target(elt, symbols){
 	this.setValue = function setValue(text){
 		//this gets executed only when a symbol was matched and needs to be inserted
 		var caretPos = _caret.getPosition(_HTMLElt);
-		//position of the typed chars to be replaced in the encontainer the caret will be repositioned in
+		//position of the typed chars to be replaced in the endcontainer the caret will be repositioned in
 		var typedIndex = caretPos.textContainer.indexOf(_typed);
 		//caretPos.value <= typedIndex when you delete and unreplaced chars have to be replaced forward
 		//when we delete, it always counts as 1 char = 1 symbol
@@ -623,6 +631,8 @@ function Typer(HTMLElt, symbols, onTyped){
 	}
 
 	function initSymbols(target){
+
+		Symbol.prototype.validateFormat(_typer.symbols);
 
 		for(var i in _typer.symbols){
 			_typer.symbols[i] = new Symbol(_typer.symbols[i], target, i);

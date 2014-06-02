@@ -43,6 +43,7 @@ Symbol.prototype = {
 	//controls the input of the plugin
 	//required : unicode, replaced
 	validateRequiredKeys : function validateRequiredKeys(symbol, key){
+
 		if(typeof symbol.unicode == 'undefined'){
 			utils.throwError('The property {unicode} is missing from the {'+key+'} symbol object. It must be a String like &#173; (decimal) or &#xf007; (hexadecimal).');
 		}
@@ -79,6 +80,13 @@ Symbol.prototype = {
 		if(symbol.after){
 			if(replacedRegex.test(symbol.after)){
 				utils.throwError('{after} separator "'+symbol.after+'" in the {'+key+'} symbol must not contain a {replaced} string from "'+symbol.replaced+'"');
+			}
+		}
+	},
+	validateFormat : function(symbols){
+		for(var i in symbols){
+			if(typeof symbols[i] != 'object'){
+				utils.throwError('The format of the symbols object must be like {hearts : {unicode : \"&#173;\", replaced : \"<3\"}}');
 			}
 		}
 	},
