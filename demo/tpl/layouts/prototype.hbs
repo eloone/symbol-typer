@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{page.title}}</title>
+{{> common-assets}}
+<script type="text/javascript" src="{{assets}}/js/prototype.js"></script>
+{{#if development}} 
+<script src="//localhost:1300/livereload.js"></script>
+{{/if}} 
+</head>
+<body>
+	{{> body }}
+</body>
+</html>

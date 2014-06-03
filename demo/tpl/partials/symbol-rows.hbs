@@ -1,0 +1,24 @@
+<script id="symbols-template" type="text/x-handlebars-template">
+	{{#raw}}
+		[[#each this]]
+			[[#isArray replaced]]
+				[[#each replaced]]
+				<tr>
+					<td>[[this]]</td>
+					<td>[[[../unicode]]]</td>
+					<td>[[#if ../limit]][[../../limit]] (up to [[../../limit]] "[[this]]" will be replaced) [[else]]no limit[[/if]]</td>
+					<td>[[@key]]</td>		
+				</tr>
+				[[/each]]
+				
+				[[else]]
+				<tr>
+					<td>[[replaced]]</td>
+					<td>[[[unicode]]]</td>
+					<td>[[#if limit]][[limit]] (up to [[limit]] "[[replaced]]" will be replaced) [[else]]no limit[[/if]]</td>
+					<td>[[@key]]</td>		
+				</tr>
+			[[/isArray]]
+		[[/each]]
+	{{/raw}}
+</script>

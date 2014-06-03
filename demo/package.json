@@ -1,0 +1,10 @@
+{
+  "author" : "Elodie Rafalimanana",
+  "license" : "Copyright 2014 - BSD License",
+  "signature" : "I dedicate this script to the fans of the Wingdings font, something to reminisce about our childhood.",
+  "name": "symbolTyper Demo pages",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.4.5"
+  }
+}

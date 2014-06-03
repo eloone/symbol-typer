@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>symbolTyper - jQuery Demo</title>
+<link href='http://fonts.googleapis.com/css?family=Handlee' rel='stylesheet' type='text/css'>
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="assets/css/font.css" rel="stylesheet"/>
+<link href="assets/css/main.css" rel="stylesheet"/>
+<!--[if IE]>
+<link href="assets/css/font.ie.css" rel="stylesheet"/>
+<![endif]-->
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+<script type="text/javascript" src="assets/js/display.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script> 
+<script type="text/javascript" src="assets/js/symbolTyper-jquery.0.1.0.js"></script> 
+<script type="text/javascript" src="assets/js/main-jquery.js"></script>
+ 
+<script src="//localhost:1300/livereload.js"></script>
+ 
+</head>
+<body>
+	
+
+<h1 class="demo-title">
+	This is the demo page for the jQuery plugin of the symbolTyper library.
+</h1>
+
+<header>
+	Type the following texts in the editable elements below, they should be replaced by their symbols according to this table :
+	<table style="width:60%">
+	<thead>
+		<tr>
+			<th>Text replaced</th>
+			<th>Symbol</th>
+			<th>Limit</th>
+			<th>Identifier</th>		
+		</tr>
+	 </thead>
+	 <tbody id="tbody">
+	 </tbody>	
+</table>
+
+	The symbols are rendered by the <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/cheatsheet/">FontAwesome</a> icon font.<br/> You can test any icon font with the library as long as you have the symbols unicodes. 
+	<br/>
+	<span class="highlight">Browers supported : HTML5 browsers and IE >= 9.</span></br></br>
+	Note : IE does not support this css <code>font-family : 'Handlee', 'FontAwesome';</code>. </br>You have to specify a single font : <code>font-family : 'FontAwesome';</code> (to render the symbols).
+</header>
+
+<p class="title">Input element :</p>
+<button class="grouped" data-id="input">console.log the status</button>
+<br/>
+<input class="editable" value="" id="input" type="text" placeholder="Type your symbols here."/>
+
+<p class="title">Textarea element :</p>
+<button class="grouped" data-id="textarea">console.log the status</button>
+<br/>
+<textarea class="editable" id="textarea">Type your symbols here.</textarea>
+
+<p class="title">Content editable element :</p>
+<button class="grouped" data-id="inputDiv">console.log the status</button>
+<div id="inputDiv" class="input editable" contenteditable="true">Type your<br>symbols here.</div>
+
+<p class="title">Single input element :</p>
+<button class="single" data-id="single_input">console.log the status</button>
+<br/>
+<input value="" id="single_input" type="text" placeholder="Type your symbols here."/>
+
+<div class="count">
+	<p class="title">Active status :</p>
+	<div id="active_status" >
+		Start typing symbols to see something changing here.
+	</div>
+</div>
+
+<script id="status-template" type="text/x-handlebars-template">
+	
+		{{#each count}}
+			<p>{{@key}} : {{this}}</p>
+		{{/each}}
+		<br/>
+		<p>The raw text: {{rawText}}</p>
+		<p>The full text: {{fullText}}</p>
+	
+</script>
+
+
+<script id="symbols-template" type="text/x-handlebars-template">
+	
+		{{#each this}}
+			{{#isArray replaced}}
+				{{#each replaced}}
+				<tr>
+					<td>{{this}}</td>
+					<td>{{{../unicode}}}</td>
+					<td>{{#if ../limit}}{{../../limit}} (up to {{../../limit}} "{{this}}" will be replaced) {{else}}no limit{{/if}}</td>
+					<td>{{@key}}</td>		
+				</tr>
+				{{/each}}
+				
+				{{else}}
+				<tr>
+					<td>{{replaced}}</td>
+					<td>{{{unicode}}}</td>
+					<td>{{#if limit}}{{limit}} (up to {{limit}} "{{replaced}}" will be replaced) {{else}}no limit{{/if}}</td>
+					<td>{{@key}}</td>		
+				</tr>
+			{{/isArray}}
+		{{/each}}
+	
+</script>
+
+<div class="info">
+	View the <a href="assets/js/main-jquery.js" target="_blank">javascript source code</a> for this demo.<br/>
+	View the required <a target="_blank" href="assets/css/font.css">css</a>.</br>
+Go back to the <a href="../demo">demo links</a>.<br/>
+Go to the <a href="https://github.com/eloone/symbol-typer">github repository</a>.<br/>
+If it does'nt work : <a href="https://github.com/eloone/symbol-typer/issues">report an issue</a> (do not call 911).</br>
+Also, more about these <a href="https://github.com/eloone/symbol-typer/demo">demo pages</a> <- here.
+</div>
+</body>
+</html>

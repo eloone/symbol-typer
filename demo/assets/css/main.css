@@ -1,0 +1,110 @@
+body{
+	margin:0;
+}
+
+body, table{
+	padding:20px;
+}
+
+th{
+	text-align: left;
+}
+
+input, textarea{
+	padding:10px;
+	border-radius:5px;
+	box-shadow: 3px 3px 3px #ddd inset;
+	border:0;
+	width:500px;
+	height:50px;
+	font-size:24px;
+}
+
+textarea{
+	height: 200px;
+}
+
+input{
+	height:40px;
+}
+
+div.input{
+	height:200px;
+	width:500px;
+	border:1px solid black;
+	padding:10px;
+}
+
+button{
+	margin-bottom: 15px;
+}
+
+.count{
+	margin-top:15px;
+	position:fixed;
+	right:15px;
+	top:0px;
+	width:350px;
+	padding:15px;
+	background:rgb(255, 255, 197);
+}
+
+.count .title{
+	text-decoration: underline;
+	padding-bottom:15px;
+}
+
+.count p{
+	padding: 0;
+	margin: 0;
+}
+
+/* angular demo */
+.input-angular{
+	padding:10px;
+	border-radius:5px;
+	box-shadow: 3px 3px 3px #ddd inset;
+	border:0;
+	width:500px;
+	height:50px;
+	font-size:36px;
+}
+
+.votes i{
+	font-style:normal;
+	padding:3px;
+}
+
+/* index */
+section{
+	margin: 10px 0;
+}
+
+/* demo pages */
+.demo-title{
+	width:800px;
+	text-align:center;
+	margin:0 0 20px 0;
+}
+
+.info{
+	margin-top:15px;
+	position:fixed;
+	right:15px;
+	bottom:15px;
+	width:350px;
+	padding:15px;
+	background:rgb(216, 255, 197);
+}
+
+.highlight{
+	background: rgb(255, 255, 197);
+	padding:2px;
+}
+
+.prototype{
+	margin-top: 15px;
+}
+
+
+

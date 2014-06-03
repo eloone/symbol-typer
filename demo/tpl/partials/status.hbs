@@ -1,0 +1,10 @@
+<script id="status-template" type="text/x-handlebars-template">
+	{{#raw}}
+		[[#each count]]
+			<p>[[@key]] : [[this]]</p>
+		[[/each]]
+		<br/>
+		<p>The raw text: [[rawText]]</p>
+		<p>The full text: [[fullText]]</p>
+	{{/raw}}
+</script>

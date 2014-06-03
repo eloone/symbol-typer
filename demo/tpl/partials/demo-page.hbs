@@ -1,0 +1,38 @@
+<header>
+	Type the following texts in the editable elements below, they should be replaced by their symbols according to this table :
+	{{> symbol-table}}
+	The symbols are rendered by the <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/cheatsheet/">FontAwesome</a> icon font.<br/> You can test any icon font with the library as long as you have the symbols unicodes. 
+	<br/>
+	<span class="highlight">Browers supported : HTML5 browsers and IE >= 9.</span></br></br>
+	Note : IE does not support this css <code>font-family : 'Handlee', 'FontAwesome';</code>. </br>You have to specify a single font : <code>font-family : 'FontAwesome';</code> (to render the symbols).
+</header>
+
+<p class="title">Input element :</p>
+<button class="grouped" data-id="input">console.log the status</button>
+<br/>
+<input class="editable" value="" id="input" type="text" placeholder="Type your symbols here."/>
+
+<p class="title">Textarea element :</p>
+<button class="grouped" data-id="textarea">console.log the status</button>
+<br/>
+<textarea class="editable" id="textarea">Type your symbols here.</textarea>
+
+<p class="title">Content editable element :</p>
+<button class="grouped" data-id="inputDiv">console.log the status</button>
+<div id="inputDiv" class="input editable" contenteditable="true">Type your<br>symbols here.</div>
+
+<p class="title">Single input element :</p>
+<button class="single" data-id="single_input">console.log the status</button>
+<br/>
+<input value="" id="single_input" type="text" placeholder="Type your symbols here."/>
+
+<div class="count">
+	<p class="title">Active status :</p>
+	<div id="active_status" >
+		Start typing symbols to see something changing here.
+	</div>
+</div>
+
+{{> status}}
+
+{{> symbol-rows}}
