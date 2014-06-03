@@ -27,17 +27,9 @@ module.exports = function(grunt) {
         src: plainBuild,
         dest: 'symbolTyper.<%= pkg.version %>.js'
       },
-      demoPlain : {
-        src: plainBuild,
-        dest: 'demo/assets/js/symbolTyper.<%= pkg.version %>.js',
-      },
       jQuery : {
         src : jqueryBuild,
         dest: 'symbolTyper-jquery.<%= pkg.version %>.js'
-      },
-      demojQuery : {
-        src : jqueryBuild,
-        dest: 'demo/assets/js/symbolTyper-jquery.<%= pkg.version %>.js'
       }
     },
     uglify : {
