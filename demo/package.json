@@ -5,6 +5,8 @@
   "name": "symbolTyper Demo pages",
   "version": "0.1.0",
   "devDependencies": {
-    "grunt": "~0.4.5"
+    "grunt": "~0.4.5",
+    "assemble" : "0.4.37",
+    "grunt-contrib-watch" : "0.6.1"
   }
 }
