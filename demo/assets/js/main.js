@@ -70,32 +70,6 @@ window.onload = function(){
 
  };
 
-function onKeyup(event){
-    var boltsCount = document.querySelector('#boltsCount');
-    var heartsCount = document.querySelector('#heartsCount');
-    var target = event.target;
-    var text = target.value;
-    var bolts = document.createElement('p');
-    var hearts = document.createElement('p');
-    bolts.innerHTML = '&#xf0e7;';
-    hearts.innerHTML = '&#xf004;';
-
-    if (event.keyCode == 56 || event.keyCode == 106){// * sign
-        target.value = text.replace(/\*$/, bolts.innerHTML+' ');
-    }
-
-    if (event.keyCode == 107 || event.keyCode == 187){// + sign
-        target.value = text.replace(/\+$/, hearts.innerHTML+' ');
-    }
-
-    boltsCount.innerHTML = getCharCount('%EF%83%A7', encodeURIComponent(target.value));
-    heartsCount.innerHTML = getCharCount('%EF%80%84', encodeURIComponent(target.value));
-}
-
-function getCountChar(char, inStr){
-    return (inStr.split(char).length - 1);
-}
-
 
 
 

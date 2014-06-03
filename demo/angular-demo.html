@@ -5,7 +5,11 @@
 <title>symbolTyper - Angular Demo</title>
 <link href='http://fonts.googleapis.com/css?family=Handlee' rel='stylesheet' type='text/css'>
 <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="assets/css/font.css" rel="stylesheet"/>
 <link href="assets/css/main.css" rel="stylesheet"/>
+<!--[if IE]>
+<link href="assets/css/font.ie.css" rel="stylesheet"/>
+<![endif]-->
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script> 
 <script type="text/javascript" src="../symbolTyper.0.1.0.min.js"></script> 
@@ -16,7 +20,12 @@
 </head>
 <body>
 	
-
+<h1>
+	This is an example use of the symbolTyper library with AngularJs.
+</h1>
+<p>This demo shows how it is practical and intuitive to capture votes from the keyboard while you are typing a review. This eases and speeds up the capture of data.<br/>
+Symbols can be used as real information and not just friendly decorations. Once the symbols are processed you can render the information they conveyed the way you want. <br/>Here, the votes are rendered with the same symbol in <code>&lt;i/&gt;</code> tags.</p>
+<p>* are replaced by &#xf005;</p>
 <div class="container" ng-controller="linesCtrl">
 		<form ng-submit="submitInput()" id="form">
 	        <input id="input" ng-model="input" class="input-angular" type="text" placeholder="Type: Friends *****"/>
@@ -59,6 +68,15 @@
 	    		</p>
 	    	</li>
 		</ul>
+	</div>
+
+	<div class="info">
+		View the <a href="assets/js/main-angular.js" target="_blank">javascript source code</a> for this demo.<br/>
+		View the required <a target="_blank" href="assets/css/font.css">css</a>.</br>
+Go back to the <a href="../demo">demo links</a>.<br/>
+Go to the <a href="https://github.com/eloone/symbol-typer">github repository</a>.<br/>
+If it does'nt work : <a href="https://github.com/eloone/symbol-typer/issues">report an issue</a> (do not call 911).</br>
+Also, more about these <a href="https://github.com/eloone/symbol-typer/demo">demo pages</a> <- here.
 	</div>
 </body>
 </html>

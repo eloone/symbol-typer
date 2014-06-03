@@ -1,5 +1,8 @@
+body{
+	margin:0;
+}
+
 body, table{
-	font-family: 'Handlee', 'FontAwesome', cursive;
 	padding:20px;
 }
 
@@ -13,7 +16,6 @@ input, textarea{
 	box-shadow: 3px 3px 3px #ddd inset;
 	border:0;
 	width:500px;
-	font-family: 'Handlee', 'FontAwesome', cursive;
 	height:50px;
 	font-size:24px;
 }
@@ -41,7 +43,7 @@ button{
 	margin-top:15px;
 	position:fixed;
 	right:15px;
-	top:15px;
+	top:0px;
 	width:350px;
 	padding:15px;
 	background:rgb(255, 255, 197);
@@ -64,7 +66,6 @@ button{
 	box-shadow: 3px 3px 3px #ddd inset;
 	border:0;
 	width:500px;
-	font-family: 'Handlee', 'FontAwesome', cursive;
 	height:50px;
 	font-size:36px;
 }
@@ -78,4 +79,32 @@ button{
 section{
 	margin: 10px 0;
 }
+
+/* demo pages */
+.demo-title{
+	width:800px;
+	text-align:center;
+	margin:0 0 20px 0;
+}
+
+.info{
+	margin-top:15px;
+	position:fixed;
+	right:15px;
+	bottom:15px;
+	width:350px;
+	padding:15px;
+	background:rgb(216, 255, 197);
+}
+
+.highlight{
+	background: rgb(255, 255, 197);
+	padding:2px;
+}
+
+.prototype{
+	margin-top: 15px;
+}
+
+
 

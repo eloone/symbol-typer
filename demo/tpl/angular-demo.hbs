@@ -1,7 +1,12 @@
 ---
 title: symbolTyper - Angular Demo
 ---
-
+<h1>
+	This is an example use of the symbolTyper library with AngularJs.
+</h1>
+<p>This demo shows how it is practical and intuitive to capture votes from the keyboard while you are typing a review. This eases and speeds up the capture of data.<br/>
+Symbols can be used as real information and not just friendly decorations. Once the symbols are processed you can render the information they conveyed the way you want. <br/>Here, the votes are rendered with the same symbol in <code>&lt;i/&gt;</code> tags.</p>
+<p>* are replaced by &#xf005;</p>
 <div class="container" ng-controller="linesCtrl">
 		<form ng-submit="submitInput()" id="form">
 	        <input id="input" ng-model="input" class="input-angular" type="text" placeholder="Type: Friends *****"/>
@@ -44,4 +49,9 @@ title: symbolTyper - Angular Demo
 	    		</p>
 	    	</li>
 		</ul>
+	</div>
+
+	<div class="info">
+		View the <a href="{{assets}}/js/main-angular.js" target="_blank">javascript source code</a> for this demo.<br/>
+		{{> links}}
 	</div>

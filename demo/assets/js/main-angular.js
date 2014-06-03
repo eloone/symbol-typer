@@ -1,6 +1,6 @@
 var symbolApp = angular.module('symbolApp', []);
 
-symbolApp.controller('linesCtrl', function($scope, $rootScope){
+symbolApp.controller('linesCtrl', function($scope){
 	var input = document.getElementById('input');
 	var symbols = {
 		stars : {
@@ -17,7 +17,6 @@ symbolApp.controller('linesCtrl', function($scope, $rootScope){
 	$scope.submitInput = function(){
 		var votes = [];
 		var status = typer.getStatus();
-		var encoded = encodeURIComponent(this.input);
 		var count = status.count.stars;
 
 		for(var i = 0; i < 5; i++){

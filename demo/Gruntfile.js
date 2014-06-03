@@ -41,6 +41,14 @@ module.exports = function(grunt) {
         files: {
           '.': ['tpl/index.hbs']
         }
+      },
+      prototype: {
+        options: {
+          layout: 'tpl/layouts/prototype.hbs'
+        },
+        files: {
+          '.': ['tpl/prototype.hbs']
+        }
       }
     },
     watch : {
