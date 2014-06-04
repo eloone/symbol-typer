@@ -60,6 +60,8 @@ var symbols = {
 //it will return a Typer object
 var typer = new symbolTyper(input, symbols, onTyped);
 
+//from here you can start typing in the input element and you will see symbols appear
+
 function onTyped(status, event){
   //callback executed every time a symbol is typed
   //status provides the symbols count and typed text in the current editable element
@@ -72,7 +74,7 @@ function onTyped(status, event){
 
 * Supports characters escape : `\<3` to not replace <3 by a heart
 * Counts the symbols : `typer.getStatus()` to get the count per symbol and text inside the editable element
-* Replaces several patterns : `replaced : [':-)', ':)']` for several patterns to replace or `'<3'` for a single pattern to replace
+* Replaces several patterns : `replaced : [':-)', ':)']` for several patterns to replace or `replaced : '<3'` for a single pattern to replace
 * Limited symbols : `limit : 5` to limit the number of symbols that will appear to 5
 
 #PROTOTYPE
