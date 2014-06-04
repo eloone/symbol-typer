@@ -175,6 +175,7 @@ will return a `Typer` object.
 			* Format :
                 
                 ```js
+			//Status object
 			{
 				count: {
 					stars : 2,
