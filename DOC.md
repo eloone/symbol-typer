@@ -142,7 +142,7 @@ function onTyped(status, event){
 ````
 
 * Parameters
-	* `status` : see the <a href="status-object">status object</a> below, it is the return of the `getStatus` method. 
+	* `status` : see the <a href="#status-object">status object</a> below, it is the return of the `getStatus` method. 
 	* `event` : keyup event triggered by the `input` element.
 
 ### Return
