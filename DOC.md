@@ -195,11 +195,12 @@ will return a `Typer` object.
 * Usage
 
 	* Several elements :
+
 If the symbolTyper was applied to several elements, you can access the Typer properties for each element with their HTML id attribute like so :
 
         ```html
 		<input type="text" id="target1"/>
-		<div contenteditable="true" id= "target2"></div>
+		<div contenteditable="true" id="target2"></div>
         ```
 
         ```js
@@ -210,6 +211,7 @@ If the symbolTyper was applied to several elements, you can access the Typer pro
         ```
         
 	* One element : 
+
 If the symbolTyper was applied to one element, you can access the Typer properties directly like so : 
 
         ```js
