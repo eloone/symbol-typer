@@ -105,9 +105,6 @@ var symbols = {
 * Behaviour :
 
 	* symbols have precedence :
-	
-	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
-		Example : `'\*'` will not be replaced.
 ```js
 
 var symbol = {
@@ -125,11 +122,14 @@ var symbol = {
 		after : ' '
 	}
 };
-```
-The first defined symbol wins. In this configuration, * will be replaced by a star and never by a smiley.
 
-	* 
-		
+```
+
+The first defined symbol wins. In this configuration, * will be replaced by a star and never by a smiley.
+	
+	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
+		Example : `'\*'` will not be replaced.
+
 #### `onTyped` : Optional
 
 * Represents a callback function that is executed everytime a symbol from the `symbols` parameter is typed in the `input` parameter.
