@@ -16,12 +16,12 @@ All the demos : http://eloone.github.io/symbol-typer/demo/
 Demo for the dependency free library : http://eloone.github.io/symbol-typer/demo/main-demo.html<br>
 Demo for the jQuery plugin : http://eloone.github.io/symbol-typer/demo/jquery-demo.html
 
-#USE
+#EXAMPLE
 
 Example use of the library with AngularJs : <br>
 http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
-Use the plugin with one or more HTML elements :
+#USE
 
 HTML markup :
 
