@@ -39,7 +39,10 @@ input{
 Javascript :
 
 ````
+//editable element
 var input = document.getElementById('typer1');
+//define your symbol map
+//this map will replace ':-)' and ':)' by a smiley and '<3' by a heart
 var symbols = {
   smileys : {
             unicode : '&#xf118;',
@@ -49,11 +52,12 @@ var symbols = {
         },
   hearts : {
             unicode : '&#xf004;',
-            replaced : ['<3'],
+            replaced : '<3',
             limit : 5
         }
 };
-
+//apply symbolTyper to the editable element
+//it will return a Typer object
 var typer = new symbolTyper(input, symbols, onTyped);
 
 function onTyped(status, event){
