@@ -5,7 +5,7 @@ Follow this documentation to implement symbolTyper with different options.
 ##Dependency free implementation
 
 If you don't use jQuery, symbolTyper is implemented like this:
-```javascript 
+```js 
 var typer = new symbolTyper(input, symbols, onTyped);
 ```
 
@@ -103,7 +103,7 @@ var symbols = {
 ```
 
 * Behaviour :
-	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
+	* Character escape : if you want to not replace a character that should be replaced, precede it with `\`.
 		* Example : `'\*'` will not be replaced.
 		
 	* symbols have precedence :
@@ -130,7 +130,7 @@ The first defined symbol wins. In this configuration, * will be replaced by a st
 
 #### `onTyped` : Optional
 
-* Represents a callback function that is executed everytime a symbol from the `symbols` parameter is typed in the `input` parameter.
+* Represents a callback function that is executed every time a symbol from the `symbols` parameter is typed in the `input` parameter.
 * Type : `function`
 * Format : 
 
@@ -141,7 +141,49 @@ function onTyped(status, event){
 ````
 
 * Parameters
-	* `status`  
+	* `status` : see 
+	* `event` : keyup event triggered by the `input` element.
+
+### Return
+
+#### `Typer` object
+
+Doing this : 
+
+```js
+var typer = new symbolTyper(input, symbols, onTyped);
+```
+
+will return a `Typer` object.
+
+* Format : 
+
+````
+//Typer object
+{
+	getStatus : [function],
+	symbols : [object],
+	onTyped : [function]
+}
+````
+
+* Properties : 
+	* `symbols` : clone object of the symbols object from the symbolTyper parameters.
+	* `onTyped` : same function as the onTyped function from the symbolTyper parameters.
+	* `getStatus` : function that gets information on the text in the active editable element.
+		* @return : a status object 
+			* Format :
+````
+Object {
+count: {
+	stars : 2,
+	smileys : 1
+},
+fullText: "Hello world "
+rawText: "Hello world"
+targetId: "input"
+}
+````
 
 ```html
 <input type="text" id="typer1"/>
