@@ -91,5 +91,5 @@ This library is based on several hacks. If you are interested in understanding h
 http://eloone.github.io/symbol-typer/demo/prototype.html 
 
 ##Demo pages
-Check out th gh-pages branch to see the code of the demo pages. They are generated with assemble.io.
+Check out the gh-pages branch to see the code of the demo pages. They are generated with http://assemble.io/
 https://github.com/eloone/symbol-typer/tree/gh-pages/demo
