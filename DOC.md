@@ -25,7 +25,7 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 #### `symbols` : Required
 
 * Represents the symbol set to map the characters you want to replace with their corresponding symbols.
-* Type : object
+* Type : `object`
 * Format : 
 
 ````
