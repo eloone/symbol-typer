@@ -23,6 +23,12 @@ http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
 ##Use
 
+Includes : 
+```html
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+	<script type="text/javascript" src="symbolTyper.0.1.0.js"></script>
+```
+
 HTML markup :
 
 ```html
