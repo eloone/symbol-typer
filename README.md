@@ -1,7 +1,7 @@
 #SYMBOL TYPER
 
 symbolTyper is a javascript library that lets you type symbols by replacing patterns you define.<br> 
-It exists as a standalone dependency free library [symbolTyper.0.1.0.js](symbolTyper.0.1.0.js) or [symbolTyper.0.1.0.min.js](symbolTyper.0.1.0.min.js) or a jQuery plugin [symbolTyper-jquery.0.1.0.js](symbolTyper-jquery.0.1.0.js) or [symbolTyper-jquery.0.1.0.min.js](symbolTyper-jquery.0.1.0.min.js).
+It exists as a standalone dependency free library [symbolTyper.0.1.0.js](symbolTyper.0.1.0.js) or [symbolTyper.0.1.0.min.js](symbolTyper.0.1.0.min.js) or a jQuery plugin [symbolTyper-jquery.0.1.0.js](symbolTyper-jquery.0.1.0.js) <br>or [symbolTyper-jquery.0.1.0.min.js](symbolTyper-jquery.0.1.0.min.js).
 
 ##Pitch
 
