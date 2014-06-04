@@ -61,6 +61,9 @@ var symbols = {
 //it will return a Typer object
 var typer = new symbolTyper(input, symbols, onTyped);
 
+//get the symbol count in the 'count' property of this object
+var status = typer.getStatus();
+
 //from here you can start typing in the input element and you will see symbols appear
 
 function onTyped(status, event){
