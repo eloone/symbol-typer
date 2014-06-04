@@ -79,7 +79,7 @@ function onTyped(status, event){
 
 #BROWSER SUPPORT
 
-HTML5 browser and IE >= 9.
+HTML5 browsers and IE >= 9.
 
 #PROTOTYPE
 
