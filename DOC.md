@@ -243,7 +243,7 @@ If the input element doesn't have an id attribute, it will be given an id `"symb
 
 ## jQuery implementation
 
-Use Use [symbolTyper-jquery.0.1.0.js](symbolTyper-jquery.0.1.0.js) or [symbolTyper-jquery.0.1.0.min.js](symbolTyper-jquery.0.1.0.min.js)
+Use [symbolTyper-jquery.0.1.0.js](symbolTyper-jquery.0.1.0.js) or [symbolTyper-jquery.0.1.0.min.js](symbolTyper-jquery.0.1.0.min.js)
 
 If you use jQuery, symbolTyper is implemented like this:
 
