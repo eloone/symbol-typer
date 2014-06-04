@@ -226,7 +226,7 @@ If the symbolTyper was applied to one element, you can access the Typer properti
         
 	* No id attribute
 
-If the input element doesn't have an id attribute. It will be given an id `"symbol_typer_{index}"`. `index` being the position of the element in the `input` arguments. The Typer object will be accessible thourgh that id.
+If the input element doesn't have an id attribute, it will be given an id `"symbol_typer_{index}"`. `index` being the position of the element in the `input` arguments. The Typer object will be accessible through that id.
 
 ### Examples
 
