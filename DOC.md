@@ -171,20 +171,20 @@ will return a `Typer` object.
 	* `symbols` : clone object of the symbols object from the symbolTyper parameters.
 	* `onTyped` : same function as the onTyped function from the symbolTyper parameters.
 	* `getStatus` : function that gets information on the text in the active editable element.
-		* @return : a status object 
+		* Return : a status object 
 			* Format :
-````
-Object {
-count: {
-	stars : 2,
-	smileys : 1
-},
-fullText: "Hello world "
-rawText: "Hello world"
-targetId: "input"
-}
-````
-
+				````
+				{
+				count: {
+					stars : 2,
+					smileys : 1
+				},
+				fullText: "Hello world "
+				rawText: "Hello world"
+				targetId: "input"
+				}
+				````
+			* nasdas
 ```html
 <input type="text" id="typer1"/>
 ```
