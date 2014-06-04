@@ -194,14 +194,13 @@ will return a `Typer` object.
 				* `targetId` : the HTML id attribute of the `input` element.
 * Usage
 
-	* Several elements :
-
+	* Several elements :<br>
 If the symbolTyper was applied to several elements, you can access the Typer properties for each element with their HTML id attribute like so :
 
-    ````html
+        ```html
 		<input type="text" id="target1"/>
 		<div contenteditable="true" id="target2"></div>
-    ````
+        ```
 
         ```js
 		var typer = new symbolTyper([document.getElementById("target1"), document.getElementById("target2")], symbols);
@@ -210,8 +209,7 @@ If the symbolTyper was applied to several elements, you can access the Typer pro
 		var statusTarget2 = typer['target2'].getStatus();
         ```
         
-	* One element : 
-
+	* One element : <br>
 If the symbolTyper was applied to one element, you can access the Typer properties directly like so : 
 
         ```js
@@ -225,6 +223,7 @@ If the symbolTyper was applied to one element, you can access the Typer properti
 		//typer.symbols also accessible
 		//typer.onTyped also accessible
         ```
+        
 	* No id attribute
 
 If the input element doesn't have an id attribute. It will be given an id `"symbol_typer_{index}"`. `index` being the position of the element in the `input` arguments. The Typer object will be accessible thourgh that id.
