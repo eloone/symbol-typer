@@ -8,6 +8,7 @@ If you don't use jQuery, symbolTyper is implemented like this:
 ```js 
 var typer = new symbolTyper(input, symbols, onTyped);
 ```
+For the jQuery implement see <a href="#jquery-implementation">below</a>.
 
 ###Parameters
 
