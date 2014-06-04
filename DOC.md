@@ -50,7 +50,7 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 		
 	* `replaced` : Required
 		* Represents the characters that you want to replace with symbols.
-		* Type : array of strings | string
+		* Type : `array` of strings | `string`
 		* Format : string that you want to replace with a symbol
 		
 		* Examples : `replaced : '<3'` will only replace `<3` or `replaced : [':-)', ':)']` will replace both ':-)' and ':)' with the same symbol.
