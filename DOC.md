@@ -17,7 +17,8 @@ var typer = new symbolTyper(input, symbols, onTyped);
 * type : array of HTMLElements | HTMLElement : input, textarea, contenteditable HTMLElement | NodeList of HTMLElements
 * Examples of accepted values :
   * ```js 
-var input = document.getElementById('typer');```
+var input = document.getElementById('typer');
+```
   * ```js 
 var input = document.getElementsByTagName('textarea');```
   * ```js 
