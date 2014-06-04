@@ -122,7 +122,6 @@ var symbol = {
 		after : ' '
 	}
 };
-
 ```
 The first defined symbol wins. In this configuration, * will be replaced by a star and never by a smiley.
 
