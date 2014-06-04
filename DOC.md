@@ -173,7 +173,7 @@ will return a `Typer` object.
 	* `onTyped` : same function as the onTyped function from the symbolTyper parameters.
 	* `getStatus` : function that gets information on the text in the active editable element.
 		* Return : a status object 
-			* <span id="status-object">Format</span> :
+			* <a name="status-object" class="anchor" href="#return">Format</a>:
                 
                 ```js
 			//Status object
