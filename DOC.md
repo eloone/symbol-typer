@@ -203,12 +203,12 @@ If the symbolTyper was applied to several elements, you can access the Typer pro
 		<div contenteditable="true" id="target2"></div>
         ```
 
-        ```js
+       ```js
 		var typer = new symbolTyper([document.getElementById("target1"), document.getElementById("target2")], symbols);
 		
 		var statusTarget1 = typer['target1'].getStatus();
 		var statusTarget2 = typer['target2'].getStatus();
-        ```
+       ```
         
 	* One element : 
 
