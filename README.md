@@ -70,6 +70,9 @@ function onTyped(status, event){
 }
 
 ```
+
+For different configuration view the full [documentation](DOC.md).
+
 ##Features
 
 * Supports characters escape : `\<3` to not replace <3 by a heart
