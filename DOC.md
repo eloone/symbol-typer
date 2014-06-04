@@ -15,7 +15,7 @@ var typer = new symbolTyper(input, symbols, onTyped);
 
 * Represents the HTML editable elements where the symbols are typed in.
 * Type : array of HTMLElements | HTMLElement : input, textarea, contenteditable HTMLElement | NodeList of HTMLElements
-* Examples of accepted values :
+* Examples :
 ```js 
 var input = document.getElementById('typer');
 var input = document.getElementsByTagName('textarea');
@@ -77,14 +77,14 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 ```js
 //minimum configuration
 //replaces * with a star
-var symbol = {
+var symbols = {
 	stars : {
 		unicode : '&#xf005;',
 		replaced : '*'
 	}
 };
 
-var symbol = {
+var symbols = {
 	//replaces * by a star up to 5 times
 	stars : {
 		unicode : '&#xf005;',
@@ -122,13 +122,14 @@ var symbol = {
 		after : ' '
 	}
 };
+
 ```
 The first defined symbol wins. In this configuration, * will be replaced by a star and never by a smiley.
 
 	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
 		* Example : `'\*'` will not be replaced.
 		
-#### onTyped : Optional
+#### `onTyped` : Optional
 
 * Represents a callback function that is executed everytime a symbol from the `symbols` parameter is typed in the `input` parameter.
 * Type : `function`
