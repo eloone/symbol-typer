@@ -5,7 +5,7 @@ Follow this documentation to implement symbolTyper with different options.
 ##Dependency free implementation
 
 If you don't use jQuery, symbolTyper is implemented like this:
-```js 
+```javascript 
 var typer = new symbolTyper(input, symbols, onTyped);
 ```
 
@@ -45,13 +45,15 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 		* Represents the symbol unicode that the icon font defined in its symbol set. This value is provided by the icon font, for example like this : http://fortawesome.github.io/Font-Awesome/cheatsheet/
 		* Type : `string`
 		* Format : single decimal or hexadecimal character entity reference referred to as unicode. Characters other than the unicode are not allowed.
-		-> Examples : `unicode : '&#xf170;'` (hexadecimal) or `unicode : '&#179;'` (decimal)
+		
+			* Examples : `unicode : '&#xf170;'` (hexadecimal) or `unicode : '&#179;'` (decimal)
 		
 	* `replaced` : Required
 		* Represents the characters that you want to replace with symbols.
 		* Type : array of strings | string
 		* Format : string that you want to replace with a symbol
-		* Examples : `replaced : '<3'` will only replace `<3` or `replaced : [':-)', ':)']` will replace both ':-)' and ':)' with the same symbol.
+		
+			* Examples : `replaced : '<3'` will only replace `<3` or `replaced : [':-)', ':)']` will replace both ':-)' and ':)' with the same symbol.
 		
 	* `before` : Optional
 		* Represents the string you want to prepend to the symbol once it is inserted.
