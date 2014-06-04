@@ -104,7 +104,10 @@ var symbols = {
 
 * Behaviour :
 
-	* symbols have precedence : 
+	* symbols have precedence :
+	
+	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
+		Example : `'\*'` will not be replaced.
 ```js
 
 var symbol = {
@@ -125,8 +128,7 @@ var symbol = {
 ```
 The first defined symbol wins. In this configuration, * will be replaced by a star and never by a smiley.
 
-	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
-		Example : `'\*'` will not be replaced.
+	* 
 		
 #### `onTyped` : Optional
 
