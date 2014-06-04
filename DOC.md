@@ -44,8 +44,8 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 	* `unicode` : Required 
 		* Represents the symbol unicode that the icon font defined in its symbol set. This value is provided by the icon font, for example like this : http://fortawesome.github.io/Font-Awesome/cheatsheet/
 		* Type : `string`
-		* Format : single decimal or hexadecimal character entity reference
-		* Examples : `unicode : '&#xf170;'` (hexadecimal) or `unicode : '&#179;'` (decimal)
+		* Format : single decimal or hexadecimal character entity reference referred to as unicode. Characters other than the unicode are not allowed.
+		-> Examples : `unicode : '&#xf170;'` (hexadecimal) or `unicode : '&#179;'` (decimal)
 		
 	* `replaced` : Required
 		* Represents the characters that you want to replace with symbols.
