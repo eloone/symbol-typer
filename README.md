@@ -1,3 +1,4 @@
+_I dedicate this script to the fans of the <a href="http://www.microsoft.com/typography/fonts/family.aspx?FID=16" target="_blank">Wingdings</a> font, something to reminisce about our childhood._
 #SYMBOL TYPER
 
 symbolTyper is a javascript library that lets you type symbols by replacing patterns you define. <br>
