@@ -11,7 +11,7 @@ var typer = new symbolTyper(input, symbols, onTyped);
 
 ###Parameters
 
-`input` : Required
+#### `input` : Required
 
 * Represents the HTML editable elements where the symbols are typed in.
 * Type : array of HTMLElements | HTMLElement : input, textarea, contenteditable HTMLElement | NodeList of HTMLElements
@@ -37,7 +37,7 @@ var input = [document.getElementById('input'), document.getElementById('div')];
       after : [optional],
       limit : [optional]
     }
-  }
+  };
 ````
 
 * Properties :
@@ -68,10 +68,67 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 		* Examples : `after : ' '`
 		
 	* `limit` : Optional
-		* Represents the maximum number of times a symbol can appear.
+		* Represents the maximum number of times a symbol can appear. 
 		* Type : `number`
 		* Format : integer
 		* Examples : `limit : 5`
+* Examples : 
+
+```js
+//minimum configuration
+//replaces * with a star
+var symbol = {
+	stars : {
+		unicode : '&#xf005;',
+		replaced : '*'
+	}
+};
+
+var symbol = {
+	//replaces * by a star up to 5 times
+	stars : {
+		unicode : '&#xf005;',
+		replaced : '*',
+		limit : 5
+	},
+	//replaces :), =) and :-) by a smiley with one space before and after
+	smileys : {
+		unicode : '&#xf118;',
+		replaced : [':)', '=)', ':-)'],
+		before : ' ',
+		after : ' '
+	}
+};
+
+```
+
+* Behaviour :
+
+	* symbols have precedence : 
+```js
+
+var symbol = {
+	//replaces * by a star up to 5 times
+	stars : {
+		unicode : '&#xf005;',
+		replaced : '*',
+		limit : 5
+	},
+	//also wants to replace * but by a smiley
+	smileys : {
+		unicode : '&#xf118;',
+		replaced : '*',
+		before : ' ',
+		after : ' '
+	}
+};
+```
+The first defined symbol wins. In this configuration, * will be replaced by a star and never by a smiley.
+
+	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
+		* Example : `'\*'` will not be replaced.
+		
+		
 
 ```html
 <input type="text" id="typer1"/>
