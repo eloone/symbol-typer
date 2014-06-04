@@ -24,18 +24,24 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 
 `symbols` : required
 
-* Represents the symbol map to map the characters you want to replace with their corresponding symbols
+* Represents the symbol set to map the characters you want to replace with their corresponding symbols.
 * type : object
 * format : 
 
-```js
+````
   var symbols = {
     key_for_symbol : {
-      unicode :
+      unicode : [required],
+      replaced : [required],
+      before : [optional],
+      after : [optional],
+      limit : [optional]
     }
-  
   }
-```
+````
+
+* properties :
+	* `unicode` : required 
 
 
 ```html
