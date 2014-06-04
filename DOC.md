@@ -18,11 +18,9 @@ var typer = new symbolTyper(input, symbols, onTyped);
 * Examples of accepted values :
 ```js 
 var input = document.getElementById('typer');
+var input = document.getElementsByTagName('textarea');
+var input = [document.getElementById('input'), document.getElementById('div')];
 ```
-  * ```js 
-var input = document.getElementsByTagName('textarea');```
-  * ```js 
-var input = [document.getElementById('input'), document.getElementById('div')];```
 
 `symbols` : required
 
