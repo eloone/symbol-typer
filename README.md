@@ -68,6 +68,12 @@ function onTyped(status, event){
 }
 
 ```
+#FEATURES
+
+* Supports characters escape : `\<3` to not replace <3 by a heart
+* Counts the symbols : `typer.getStatus()` to get the count per symbol and text inside the editable element
+* Replaces several patterns : `replaced : [':-)', ':)']` for several patterns to replace or `'<3'` for a single pattern to replace
+* Limited symbols : `limit : 5` to limit the number of symbols that will appear to 5
 
 #PROTOTYPE
 
