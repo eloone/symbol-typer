@@ -7,7 +7,7 @@ It exists as a standalone dependency free library [symbolTyper.0.1.0.js](symbolT
 
 Sometimes when you write, you type textual symbols like :) or <3. Wouldn't it be nice to see those symbols rendered nicely as what they represent? By using the power of icon fonts symbolTyper will replace those patterns you defined with their symbols. Until now this was done only when rendering the text after it is sent or saved, it was done when the text is no longer editable. 
 
-With symbolTyper symbols appear as you type while you are editing the text, symbols become characters part of the text you are editing. And even better, symbolTyper counts the symbols that were typed so you can use that information when you render the text later. The symbols are no longer just decorative, you can really use them to convey information. 
+With symbolTyper symbols appear as you type while you are editing the text, symbols become characters part of the text you are editing. And even better, symbolTyper counts the symbols that were typed so you can use that information when you render the text later. The symbols are no longer just decorative, you can also use them to convey information. 
 
 ##Demo
 
