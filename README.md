@@ -13,7 +13,7 @@ With symbolTyper symbols appear as you type while you are editing the text. And 
 
 All the demos : http://eloone.github.io/symbol-typer/demo/ 
 
-Demo for the dependency free library : http://eloone.github.io/symbol-typer/demo/main-demo.html
+Demo for the dependency free library : http://eloone.github.io/symbol-typer/demo/main-demo.html<br>
 Demo for the jQuery plugin : http://eloone.github.io/symbol-typer/demo/jquery-demo.html
 
 #USE
