@@ -97,6 +97,7 @@ var symbols = {
 	}
 };
 
+//augmented configuration
 var symbols = {
 	//replaces * by a star up to 5 times
 	stars : {
