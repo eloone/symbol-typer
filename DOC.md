@@ -1,8 +1,11 @@
 #DOCUMENTATION
 
 Follow this documentation to implement symbolTyper with different options.
+If you haven't already read first the [README](README.md#use) for the requirements and basics.
 
 ##Dependency free implementation
+
+Use [symbolTyper.0.1.0.js](symbolTyper.0.1.0.js) or [symbolTyper.0.1.0.min.js](symbolTyper.0.1.0.min.js)
 
 ### Examples
 
@@ -239,6 +242,8 @@ If the symbolTyper was applied to one element, you can access the Typer properti
 If the input element doesn't have an id attribute, it will be given an id `"symbol_typer_{index}"`. `index` being the position of the element in the `input` arguments. The Typer object will be accessible through that id.
 
 ## jQuery implementation
+
+Use Use [symbolTyper-jquery.0.1.0.js](symbolTyper-jquery.0.1.0.js) or [symbolTyper-jquery.0.1.0.min.js](symbolTyper-jquery.0.1.0.min.js)
 
 If you use jQuery, symbolTyper is implemented like this:
 
