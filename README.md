@@ -96,4 +96,5 @@ http://eloone.github.io/symbol-typer/demo/prototype.html
 
 ##Demo pages
 The demo pages are under the gh-pages branch. They are generated with http://assemble.io/
+
 https://github.com/eloone/symbol-typer/tree/gh-pages/demo
