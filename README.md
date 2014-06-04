@@ -21,7 +21,7 @@ Demo for the jQuery plugin : http://eloone.github.io/symbol-typer/demo/jquery-de
 Example use of the library with AngularJs : <br>
 http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
-Use the plugin on one or more HTML elements :
+Use the plugin with one or more HTML elements :
 
 HTML markup :
 
@@ -53,10 +53,14 @@ var symbols = {
             limit : 5
         }
 };
+
 var typer = new symbolTyper(input, symbols, onTyped);
 
 function onTyped(status, event){
   //callback executed every time a symbol is typed
+  //status provides the symbols count and typed text in the current editable element
+  //event is the keyup event
+  console.log(status);
 }
 
 ````
