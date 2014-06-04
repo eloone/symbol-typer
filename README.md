@@ -77,6 +77,10 @@ function onTyped(status, event){
 * Replaces several patterns : `replaced : [':-)', ':)']` for several patterns to replace or `replaced : '<3'` for a single pattern to replace
 * Limited symbols : `limit : 5` to limit the number of symbols that will appear to 5
 
+#BROWSER SUPPORT
+
+HTML5 browser and IE >= 9.
+
 #PROTOTYPE
 
 This library is based on several hacks. If you are interested in understanding how it works under the hood you can study the prototype it is based on : <br>
