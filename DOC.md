@@ -22,7 +22,7 @@ var input = document.getElementsByTagName('textarea');
 var input = [document.getElementById('input'), document.getElementById('div')];
 ```
 
-`symbols` : Required
+#### `symbols` : Required
 
 * Represents the symbol set to map the characters you want to replace with their corresponding symbols.
 * Type : object
@@ -128,7 +128,20 @@ The first defined symbol wins. In this configuration, * will be replaced by a st
 	* Character escape : if you want to not replace a character that should be replace, precede it with `\`.
 		* Example : `'\*'` will not be replaced.
 		
-		
+#### onTyped : Optional
+
+* Represents a callback function that is executed everytime a symbol from the `symbols` parameter is typed in the `input` parameter.
+* Type : `function`
+* Format : 
+
+````
+function onTyped(status, event){
+
+}
+````
+
+* Parameters
+	* `status`  
 
 ```html
 <input type="text" id="typer1"/>
