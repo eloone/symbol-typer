@@ -4,6 +4,13 @@ Follow this documentation to implement symbolTyper with different options.
 
 ##Dependency free implementation
 
+### Examples
+
+For full examples view : 
+
+* http://eloone.github.io/symbol-typer/demo/main-demo.html
+* http://eloone.github.io/symbol-typer/demo/angular-demo.html
+
 If you don't use jQuery, symbolTyper is implemented like this:
 ```js 
 var typer = new symbolTyper(input, symbols, onTyped);
@@ -228,13 +235,6 @@ If the symbolTyper was applied to one element, you can access the Typer properti
 	* No id attribute
 
 If the input element doesn't have an id attribute, it will be given an id `"symbol_typer_{index}"`. `index` being the position of the element in the `input` arguments. The Typer object will be accessible through that id.
-
-### Examples
-
-For full examples view : 
-
-* http://eloone.github.io/symbol-typer/demo/main-demo.html
-* http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
 ## jQuery implementation
 
