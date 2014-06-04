@@ -46,21 +46,25 @@ var input = [document.getElementById('input'), document.getElementById('div')];
 		* Type : `string`
 		* Format : single decimal or hexadecimal character entity reference
 		* Examples : `unicode : '&#xf170;'` (hexadecimal) or `unicode : '&#179;'` (decimal)
+		
 	* `replaced` : Required
 		* Represents the characters that you want to replace with symbols.
 		* Type : array of strings | string
 		* Format : string that you want to replace with a symbol
 		* Examples : `replaced : '<3'` will only replace `<3` or `replaced : [':-)', ':)']` will replace both ':-)' and ':)' with the same symbol.
+		
 	* `before` : Optional
 		* Represents the string you want to prepend to the symbol once it is inserted.
 		* Type : `string`
 		* Format : string that is not contained in the `replaced` property.
 		* Examples : `before : ' '`
+		
 	* `after` : Optional
 		* Represents the string you want to append to the symbol once it is inserted.
 		* Type : `string`
 		* Format : string that is not contained in the `replaced` property.
 		* Examples : `after : ' '`
+		
 	* `limit` : Optional
 		* Represents the maximum number of times a symbol can appear.
 		* Type : `number`
