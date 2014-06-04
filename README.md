@@ -71,7 +71,7 @@ function onTyped(status, event){
 
 ```
 
-For different configuration view the full [documentation](DOC.md).
+For different settings view the [FULL DOCUMENTATION](DOC.md).
 
 ##Features
 
