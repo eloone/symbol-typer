@@ -11,6 +11,8 @@ For full examples view :
 * http://eloone.github.io/symbol-typer/demo/main-demo.html
 * http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
+### Implementation
+
 If you don't use jQuery, symbolTyper is implemented like this:
 ```js 
 var typer = new symbolTyper(input, symbols, onTyped);
