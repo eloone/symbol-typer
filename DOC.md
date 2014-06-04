@@ -198,11 +198,11 @@ will return a `Typer` object.
 
 If the symbolTyper was applied to several elements, you can access the Typer properties for each element with their HTML id attribute like so :
 
-    ```html
+    ````html
 		<input type="text" id="target1"/>
 		<div contenteditable="true" id="target2"></div>
-    ```
-;l;'l;'l
+    ````
+
         ```js
 		var typer = new symbolTyper([document.getElementById("target1"), document.getElementById("target2")], symbols);
 		
