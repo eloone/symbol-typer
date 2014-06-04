@@ -43,14 +43,14 @@ Javascript :
 var input = document.getElementById('typer1');
 //define your symbol map
 var symbols = {
+  //replaces ':-)' and ':)' by a smiley with a space before and after
   smileys : {
-  	//replaces ':-)' and ':)' by a smiley with a space before and after
             unicode : '&#xf118;',
             before : ' ',
             after : ' ',
             replaced : [':-)', ':)']
         },
-        //replaces <3 by a heart up to 5 times
+  //replaces <3 by a heart up to 5 times
   hearts : {
             unicode : '&#xf004;',
             replaced : '<3',
