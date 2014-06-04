@@ -77,6 +77,10 @@ function onTyped(status, event){
 * Replaces several patterns : `replaced : [':-)', ':)']` for several patterns to replace or `replaced : '<3'` for a single pattern to replace
 * Limited symbols : `limit : 5` to limit the number of symbols that will appear to 5
 
+#REQUIREMENTS
+
+* You need to work with an icon font to enable symbol rendering. The demo for example uses FontAwesome.
+
 #BROWSER SUPPORT
 
 HTML5 browsers and IE >= 9.
