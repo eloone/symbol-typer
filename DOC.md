@@ -141,7 +141,7 @@ function onTyped(status, event){
 ````
 
 * Parameters
-	* `status` : see 
+	* `status` : see the status object below, it is the return of the `getStatus` method. 
 	* `event` : keyup event triggered by the `input` element.
 
 ### Return
@@ -173,63 +173,79 @@ will return a `Typer` object.
 	* `getStatus` : function that gets information on the text in the active editable element.
 		* Return : a status object 
 			* Format :
+                
                 ```js
-
-{
-	count: {
-		stars : 2,
-		smileys : 1
-	},
-	fullText: "Hello world "
-	rawText: "Hello world"
-	targetId: "input"
-}
-
+			{
+				count: {
+					stars : 2,
+					smileys : 1
+				},
+				fullText: "Hello world "
+				rawText: "Hello world"
+				targetId: "input"
+			}
                 ```
 
-* nasdas
-```html
-<input type="text" id="typer1"/>
+			* Properties : 
+				* `count` : object that counts the symbols in the input element at the time you called `getStatus`. The properties used are the same identifiers you used in the `symbols` object from the parameters. 
+				* `fullText` : the text including the symbols you typed in the input element at that time.
+				* `rawText` : the text excluding the symbols you typed in the input element at that time.
+				* `targetId` : the HTML id attribute of the `input` element.
+* Usage
+
+	* Several elements :
+If the symbolTyper was applied to several elements, you can access the Typer properties for each element with their HTML id attribute like so :
+
+        ```html
+		<input type="text" id="target1"/>
+		<div contenteditable="true" id= "target2"></div>
+        ```
+
+        ```js
+		var typer = new symbolTyper([document.getElementById("target1"), document.getElementById("target2")], symbols);
+		
+		var statusTarget1 = typer['target1'].getStatus();
+		var statusTarget2 = typer['target2'].getStatus();
+        ```
+        
+	* One element : 
+If the symbolTyper was applied to one element, you can access the Typer properties directly like so : 
+
+        ```js
+		var typer = new symbolTyper(input, symbols);
+		var status = typer.getStatus();
+		
+		//or this is also still valid assuming the id attribute is 'target': 
+		
+		var status = typer['target'].getStatus();
+		
+		//typer.symbols also accessible
+		//typer.onTyped also accessible
+        ```
+	* No id attribute
+
+If the input element doesn't have an id attribute. It will be given an id `"symbol_typer_{index}"`. `index` being the position of the element in the `input` arguments. The Typer object will be accessible thourgh that id.
+
+### Examples
+
+For full examples view : 
+
+* http://eloone.github.io/symbol-typer/demo/main-demo.html
+* http://eloone.github.io/symbol-typer/demo/angular-demo.html
+
+## jQuery implementation
+
+If you use jQuery, symbolTyper is implemented like this:
+
+```js 
+var typer = $('.editable').symbolTyper(symbols, onTyped);
 ```
 
-Css : 
+`typer` is a Typer object.
+Everything else works like the dependence free plugin.
 
-```css
-input{
-	font-family: 'Arial', 'FontAwesome', cursive;
-}
-```
-Javascript :
+### Examples
 
-```js
-//editable element
-var input = document.getElementById('typer1');
-//define your symbol map
-//this map will replace ':-)' and ':)' by a smiley and '<3' by a heart
-var symbols = {
-  smileys : {
-            unicode : '&#xf118;',
-            before : ' ',
-            after : ' ',
-            replaced : [':-)', ':)']
-        },
-  hearts : {
-            unicode : '&#xf004;',
-            replaced : '<3',
-            limit : 5
-        }
-};
-//apply symbolTyper to the editable element
-//it will return a Typer object
-var typer = new symbolTyper(input, symbols, onTyped);
+For full jQuery examples view : 
 
-//from here you can start typing in the input element and you will see symbols appear
-
-function onTyped(status, event){
-  //callback executed every time a symbol is typed
-  //status provides the symbols count and typed text in the current editable element
-  //event is the keyup event
-  console.log(status);
-}
-
-```
+* http://eloone.github.io/symbol-typer/demo/jquery-demo.html
