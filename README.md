@@ -89,3 +89,7 @@ HTML5 browsers and IE >= 9.
 
 This library is based on several hacks. If you are interested in understanding how it works under the hood you can study the prototype it is based on : <br>
 http://eloone.github.io/symbol-typer/demo/prototype.html 
+
+##Demo pages
+Check out th gh-pages branch to see the code of the demo pages. They are generated with assemble.io.
+https://github.com/eloone/symbol-typer/tree/gh-pages/demo
