@@ -173,18 +173,21 @@ will return a `Typer` object.
 	* `getStatus` : function that gets information on the text in the active editable element.
 		* Return : a status object 
 			* Format :
-````
-				{
-				count: {
-					stars : 2,
-					smileys : 1
-				},
-				fullText: "Hello world "
-				rawText: "Hello world"
-				targetId: "input"
-				}
-````
-			* nasdas
+                ```js
+
+{
+	count: {
+		stars : 2,
+		smileys : 1
+	},
+	fullText: "Hello world "
+	rawText: "Hello world"
+	targetId: "input"
+}
+
+                ```
+
+* nasdas
 ```html
 <input type="text" id="typer1"/>
 ```
