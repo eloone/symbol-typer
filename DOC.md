@@ -142,7 +142,7 @@ function onTyped(status, event){
 ````
 
 * Parameters
-	* `status` : see the status object below, it is the return of the `getStatus` method. 
+	* `status` : see the <a href="status-object">status object</a> below, it is the return of the `getStatus` method. 
 	* `event` : keyup event triggered by the `input` element.
 
 ### Return
@@ -173,7 +173,7 @@ will return a `Typer` object.
 	* `onTyped` : same function as the onTyped function from the symbolTyper parameters.
 	* `getStatus` : function that gets information on the text in the active editable element.
 		* Return : a status object 
-			* Format :
+			* <span id="status-object">Format</span> :
                 
                 ```js
 			//Status object
