@@ -25,20 +25,20 @@ Use the plugin with one or more HTML elements :
 
 HTML markup :
 
-````
+```html
 <input type="text" id="typer1"/>
-````
+```
 
 Css : 
 
-````
+```css
 input{
 	font-family: 'Arial', 'FontAwesome', cursive;
 }
-````
+```
 Javascript :
 
-````
+```js
 //editable element
 var input = document.getElementById('typer1');
 //define your symbol map
@@ -67,7 +67,7 @@ function onTyped(status, event){
   console.log(status);
 }
 
-````
+```
 
 #PROTOTYPE
 
