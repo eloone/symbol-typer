@@ -18,7 +18,7 @@ Demo for the jQuery plugin : http://eloone.github.io/symbol-typer/demo/jquery-de
 
 #EXAMPLE
 
-Example use of the library with AngularJs : <br>
+Example use with AngularJs : <br>
 http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
 #USE
