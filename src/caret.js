@@ -115,10 +115,32 @@ function _getPositionInputTextArea(){
 
 //sets the caret position in text node or html editable element
 function _setPositionElement(pos){
+	//endContainer should be a textNode or an element containing a textNode
 	var endContainer = this.target.node;
 	
 	if(!this.target.isText()){
 		endContainer = this.target.node.firstChild;	
+	}
+
+	if(endContainer.nodeType != 3){
+		throwError('The endContainer you specified to position the caret should be a textNode or an Element containing a textNode as first child.');
+	}
+
+	//this is for IE because it considers blank spaces &nbsp; and symbols inserted as separate textNodes 
+	//therefore the position path technique doesn't map the position of the endContainer originally containing the caret
+	//after you insert symbols or spaces new nodes appear  and the position path is not the same anymore
+	//so you need to position the caret in those new nodes going from the original node where you wanted to position it
+	//otherwise you try to insert at a position greater than the textNode length it will trigger an index error
+	//basically you move the caret in the next node until you can position it at the wanted position but in a node that has sufficient length to contain it
+	while(pos > endContainer.length && endContainer.nextSibling){
+		pos = pos - endContainer.length;
+		endContainer = endContainer.nextSibling;
+	}
+
+	//if you still overflow the container it means the pos input is purposefully too big
+	//we simply position the caret at the end of the endContainer (avoids the index size error)
+	if(pos > endContainer.length){
+		pos = endContainer.length;
 	}
 
     var range = document.createRange();
