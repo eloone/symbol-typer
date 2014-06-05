@@ -49,15 +49,6 @@ module.exports = function(grunt) {
           livereload : true
         }
       }
-    },
-    mergejs : {
-      options : {
-        test : 3
-      },
-      files : {
-        src : 'src',
-        dest : 'dest'
-      }
     }
   });
 
@@ -67,11 +58,5 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['concat', 'uglify', 'watch']);
-
-
-grunt.registerMultiTask('mergejs', 'Merge javascript files', function() {
-  grunt.log.writeln(this.target + ': ' + this.data);
-  grunt.log.writeln(this.options().test);
-});
 
 };
