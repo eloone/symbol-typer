@@ -95,7 +95,7 @@ For different settings view the [DOCUMENTATION](DOC.md).
 
 ##Requirements
 
-* You need to work with an icon font to enable symbol rendering. The demo for example uses FontAwesome.
+* You need to work with an icon font to enable symbol rendering. The demo for example uses [FontAwesome](http://fortawesome.github.io/Font-Awesome/).
 
 ##Browser support
 
