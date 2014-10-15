@@ -3,7 +3,7 @@ function Typer(HTMLElt, symbols, onTyped){
 	var _typer = this;
 	var _filterKeyDown = false;
 	var _IE = false;
-	
+
 	//symbols are cloned per instance to avoid mixing objects between instances since object are only references
 	_typer.symbols = utils.clone(symbols);
 
@@ -17,6 +17,10 @@ function Typer(HTMLElt, symbols, onTyped){
 		return _target.getStatus();
 	};
 
+	this.renderSymbols = function(){
+		_target.insertSymbols();
+	};
+
 	function enableSymbols(HTMLElt){
 
 		initSymbols(HTMLElt);
@@ -26,15 +30,15 @@ function Typer(HTMLElt, symbols, onTyped){
 
 			HTMLElt.addEventListener('keydown', onKeydown);
 		}
-		
+
 		if(HTMLElt.attachEvent){
 			_IE = true;
-			
+
 			HTMLElt.attachEvent('onkeyup', onKeyup);
 
 			HTMLElt.attachEvent('onkeydown', onKeydown);
 		}
-		
+
 	}
 
 	function initSymbols(target){
@@ -51,7 +55,7 @@ function Typer(HTMLElt, symbols, onTyped){
 		//enter/left/right
 	    var forbidden = [13, 39, 37];
 	    var forbiddenKey = false;
-	    
+
 	    for(var i = 0; i < forbidden.length; i++){
 	    	if(forbidden[i] == event.keyCode){
 	    		forbiddenKey = true;
@@ -68,7 +72,7 @@ function Typer(HTMLElt, symbols, onTyped){
 			if(_filterKeyDown){
 				return;
 			}
-			
+
 			var targetElt = _IE ? event.srcElement : event.target;
 
 			if(targetElt !== _target.node){

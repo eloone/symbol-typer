@@ -5,18 +5,18 @@ Support : IE9+ and html5 browsers
 (function(window){
 
 	var supported;
-	
+
 	if(window.addEventListener){
 		window.addEventListener('load', init);
 	}
-	
+
 	if(window.attachEvent){
 		window.attachEvent('onload', init);
 	}
-	
+
 	function init(){
 		supported = typeof (window.getSelection && document.createRange) !== 'undefined';//Modern Browsers and IE9+
-		
+
 		if(supported === false){
 			throwError('This browser is not supported. This script only supports HTML5 browsers and Internet Explorer 9 and above.');
 		}
@@ -47,7 +47,7 @@ Support : IE9+ and html5 browsers
 	function Caret(){}
 
 	Caret.prototype = {
-	
+
 		getPosition : function(target){
 			this.target = new Target(target);
 
@@ -59,9 +59,9 @@ Support : IE9+ and html5 browsers
 				return _getPositionContentEditable.call(this);
 			}else{
 				return _getPositionInputTextArea.call(this);
-			}		
+			}
 		},
-	
+
 		setPosition : function(pos, endContainer){
 			if(pos && !endContainer){
 				throwError('Argument 2 "'+endContainer+'" is invalid. It must be the HTML Element where to position the caret or a PositionPath.');
@@ -101,7 +101,7 @@ function _getPositionContentEditable(){
 
 function _getPositionInputTextArea(){
 	this.target.node.focus();
-	
+
 	return {
 		value : this.target.node.selectionStart,
 		path : new PositionPath(this.target.node, this.target.node),
@@ -117,16 +117,16 @@ function _getPositionInputTextArea(){
 function _setPositionElement(pos){
 	//endContainer should be a textNode or an element containing a textNode
 	var endContainer = this.target.node;
-	
+
 	if(!this.target.isText()){
-		endContainer = this.target.node.firstChild;	
+		endContainer = this.target.node.firstChild;
 	}
 
 	if(endContainer.nodeType != 3){
 		throwError('The endContainer you specified to position the caret should be a textNode or an Element containing a textNode as first child.');
 	}
 
-	//this is for IE because it considers blank spaces &nbsp; and symbols inserted as separate textNodes 
+	//this is for IE because it considers blank spaces &nbsp; and symbols inserted as separate textNodes
 	//therefore the position path technique doesn't map the position of the endContainer originally containing the caret
 	//after you insert symbols or spaces new nodes appear  and the position path is not the same anymore
 	//so you need to position the caret in those new nodes going from the original node where you wanted to position it
@@ -151,11 +151,11 @@ function _setPositionElement(pos){
     selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
-     
+
 }
 
 function _setPositionInputTextArea(pos){
-	this.target.node.setSelectionRange(pos, pos);	
+	this.target.node.setSelectionRange(pos, pos);
 }
 
 //utils functions

@@ -13,7 +13,7 @@ isContentEditable : function isContentEditable(HTMLElt){
 	if(HTMLElt.tagName == 'INPUT' || HTMLElt.tagName == 'TEXTAREA'){
 		return false;
 	}
-	
+
 	return true;
 },
 
@@ -46,7 +46,7 @@ convertToText : function convertToText(html){
 IEFix : function IEFix(){
 	if(typeof String.prototype.trim !== 'function') {
 	  String.prototype.trim = function() {
-	    return this.replace(/^\s+|\s+$/g, ''); 
+	    return this.replace(/^\s+|\s+$/g, '');
 	  }
 	}
 },
@@ -83,7 +83,7 @@ clone : function clone(obj){
 				}else{
 					newObj[k][i] = obj[k][i];
 				}
-				
+
 			}
 		}
 

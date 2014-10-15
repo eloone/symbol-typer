@@ -3,7 +3,7 @@
   "license" : "Copyright 2014 - BSD License",
   "signature" : "I dedicate this script to the fans of the Wingdings font, something to reminisce about our childhood.",
   "name": "symbolTyper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-concat": "~0.4.0",

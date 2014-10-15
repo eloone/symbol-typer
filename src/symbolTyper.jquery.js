@@ -10,7 +10,7 @@ jQuery.fn.symbolTyper = function(symbols, onTyped){
 			utils.throwError('No HTML element found for selector "'+this.selector+'"');
 		}
 
-		return new symbolTyper(typers, symbols, onTyped);		
+		return new symbolTyper(typers, symbols, onTyped);
 	}catch(e){
 		utils.displayError(e);
 	}

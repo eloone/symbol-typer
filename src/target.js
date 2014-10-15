@@ -31,11 +31,11 @@ function Target(elt, symbols){
 		var newText = text;
 
 		var plainText = utils.convertToText(text);
-	
+
 		var pattern = '([^\\\\]|^)'+'('+symbol.pattern+')';
 
 		var regexp = new RegExp(pattern);
- 
+
 		var replacedMatched = regexp.exec(newText);
 
 		symbol.typed = '';
@@ -57,7 +57,7 @@ function Target(elt, symbols){
 				count = this.getSymbolCount(symbol, newText);
 				symbol.matched = true;
 			}
-			
+
 		}else{
 			symbol.matched = regexp.test(newText);
 			newText = newText.replace(regexp, '$1'+symbol.inserted);
@@ -83,7 +83,7 @@ function Target(elt, symbols){
 
 		return res;
 	};
-	
+
 	//gets the count of symbols, and text entered in target
 	this.getStatus = function getStatus(){
 		var text = this.getValue();
@@ -94,12 +94,12 @@ function Target(elt, symbols){
 		for(var key in _symbols){
 			var symbol = _symbols[key];
 			var symbolPattern = '('+symbol.encoded+')';
-			var escapedPattern = '(\\\\)('+symbol.pattern+')';	
+			var escapedPattern = '(\\\\)('+symbol.pattern+')';
 			var regexpEscaped = new RegExp(escapedPattern, 'g');
 			var regexpSymbol = new RegExp(symbolPattern, 'g');
 
 			res.count[key] = utils.getCountChar(symbol.encoded, rawEncodedHtml);
-			
+
 			rawEncodedHtml = rawEncodedHtml.replace(regexpSymbol, '');
 
 			resText = utils.htmlTrim(decodeURIComponent(rawEncodedHtml));
@@ -108,14 +108,14 @@ function Target(elt, symbols){
 
 			rawEncodedHtml = encodeURIComponent(resText);
 		}
-		
+
 		res.rawText = utils.convertToText(resText);
 		res.fullText = utils.convertToText(text);
 		res.targetId = this.node.id;
 
 		return res;
 	};
-	
+
 	this.setValue = function setValue(text){
 		//this gets executed only when a symbol was matched and needs to be inserted
 		var caretPos = _caret.getPosition(_HTMLElt);
@@ -128,7 +128,7 @@ function Target(elt, symbols){
 
 		if(this.isContentEditable){
 			_HTMLElt.innerHTML = text;
-		}else{	
+		}else{
 			_HTMLElt.value = text;
 		}
 
@@ -142,7 +142,7 @@ function Target(elt, symbols){
 			return _HTMLElt.value;
 		}
 	};
-			
-	this.isContentEditable = utils.isContentEditable(_HTMLElt);	
-	
+
+	this.isContentEditable = utils.isContentEditable(_HTMLElt);
+
 }

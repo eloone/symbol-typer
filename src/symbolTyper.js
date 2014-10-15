@@ -14,7 +14,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 		if(typeof HTMLElt == 'undefined'){
 			utils.throwError('Argument 1 is missing. It must be an HTML Element or a collection (array or NodeList) of HTML elements.');
 		}
-	
+
 		if(typeof symbols !== 'object'){
 			utils.throwError('Argument 2 is missing. It should be an object of symbols like {hearts : {unicode : "&#xf0e7;", replaced: "*"}}.');
 		}
@@ -25,7 +25,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 			elements = HTMLElt;
 		}
 
-		var res = {}, i = 0;	
+		var res = {}, i = 0;
 
 		do{
 			utils.checkHtmlElt(elements[i], i);
@@ -44,7 +44,7 @@ function symbolTyper(HTMLElt, symbols, onTyped){
 			}
 		}
 
-		return res;	
+		return res;
 
 	}catch(e){
 		//this will display known errors that prevent the library from working but doesn't block the other existing scripts

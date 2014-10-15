@@ -18,7 +18,7 @@ module.exports = function(grunt) {
     concat: {
       options: {
         stripBanners: false,
-        banner: '/*\n<%= pkg.author %> <%= pkg.license %> \n<%= pkg.signature %>\n<%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n*/\n',
+        banner: '/*\n<%= pkg.author %> <%= pkg.license %>\n<%= pkg.signature %>\n<%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n*/\n',
         process: function(src, filepath) {
             return '/* ' + filepath +' begins : */\n' + src + '\n/* '+filepath+' ends. */\n';
         }

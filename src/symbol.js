@@ -13,7 +13,7 @@ function Symbol(symbol, target, key){
 
 	symbol.encoded = encodeURIComponent(utils.htmlTrim(symbol.htmlSymbol));
 
-	symbol.before = formatSeparator(symbol.before, target);		
+	symbol.before = formatSeparator(symbol.before, target);
 
 	symbol.after = formatSeparator(symbol.after, target);
 
@@ -36,7 +36,7 @@ function formatSeparator(separator, target){
 		}
 	}
 
-	return separator;	
+	return separator;
 }
 
 Symbol.prototype = {
@@ -64,7 +64,7 @@ Symbol.prototype = {
 	},
 	//optional : limit, before, after
 	validateOptionalKeys : function validateOptionalKeys(symbol, key){
-		
+
 		var replacedRegex = new RegExp(symbol.pattern, 'g');
 
 		if(symbol.limit && typeof symbol.limit !== 'number'){
