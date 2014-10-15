@@ -3,9 +3,28 @@
 Follow this documentation to implement symbolTyper with different options.<br>
 If you haven't already, please read first the [README](README.md#use) for the requirements and basics.
 
+## jQuery implementation
+
+Use [symbolTyper-jquery.0.1.1.js](symbolTyper-jquery.0.1.1.js) or [symbolTyper-jquery.0.1.1.min.js](symbolTyper-jquery.0.1.1.min.js)
+
+If you use jQuery, symbolTyper is implemented like this:
+
+```js 
+var typer = $('.editable').symbolTyper(symbols, onTyped);
+```
+
+`typer` is a Typer object.
+Everything else works like the dependence free plugin - see documentation below.
+
+### Examples
+
+For full jQuery examples view : 
+
+* http://eloone.github.io/symbol-typer/demo/jquery-demo.html
+
 ##Dependency free implementation
 
-Use [symbolTyper.0.1.0.js](symbolTyper.0.1.0.js) or [symbolTyper.0.1.0.min.js](symbolTyper.0.1.0.min.js)
+Use [symbolTyper.0.1.1.js](symbolTyper.0.1.1.js) or [symbolTyper.0.1.1.min.js](symbolTyper.0.1.1.min.js)
 
 ### Examples
 
@@ -177,13 +196,16 @@ will return a `Typer` object.
 {
 	getStatus : [function],
 	symbols : [object],
-	onTyped : [function]
+	onTyped : [function],
+	renderSymbols : [function]
 }
 ````
 
 * Properties : 
 	* `symbols` : clone object of the symbols object from the symbolTyper parameters.
 	* `onTyped` : same function as the onTyped function from the symbolTyper parameters.
+	* `renderSymbols` : renders symbols in target input without typing
+		* Ex:  `typer.renderSymbols();`
 	* `getStatus` : function that gets information on the text in the active editable element.
 		* Return : a status object 
 			* <a name="status-object" class="anchor" href="#status-object">Format</a>:
@@ -241,22 +263,3 @@ If the symbolTyper was applied to one element, you can access the Typer properti
 	* No id attribute
 
 If the input element doesn't have an id attribute, it will be given an id `"symbol_typer_{index}"`. `index` being the position of the element in the `input` arguments. The Typer object will be accessible through that id.
-
-## jQuery implementation
-
-Use [symbolTyper-jquery.0.1.0.js](symbolTyper-jquery.0.1.0.js) or [symbolTyper-jquery.0.1.0.min.js](symbolTyper-jquery.0.1.0.min.js)
-
-If you use jQuery, symbolTyper is implemented like this:
-
-```js 
-var typer = $('.editable').symbolTyper(symbols, onTyped);
-```
-
-`typer` is a Typer object.
-Everything else works like the dependence free plugin.
-
-### Examples
-
-For full jQuery examples view : 
-
-* http://eloone.github.io/symbol-typer/demo/jquery-demo.html
