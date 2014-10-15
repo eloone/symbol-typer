@@ -3,17 +3,17 @@ ___
 #SYMBOL TYPER
 
 symbolTyper is a javascript library that lets you type symbols by replacing patterns you define. <br>
-It exists as a standalone dependency free library [symbolTyper.0.1.0.js](symbolTyper.0.1.0.js) or [symbolTyper.0.1.0.min.js](symbolTyper.0.1.0.min.js) <br>or a jQuery plugin [symbolTyper-jquery.0.1.0.js](symbolTyper-jquery.0.1.0.js) or [symbolTyper-jquery.0.1.0.min.js](symbolTyper-jquery.0.1.0.min.js).
+It exists as a standalone dependency free library [symbolTyper.0.1.1.js](symbolTyper.0.1.1.js) or [symbolTyper.0.1.1.min.js](symbolTyper.0.1.1.min.js) <br>or a jQuery plugin [symbolTyper-jquery.0.1.1.js](symbolTyper-jquery.0.1.1.js) or [symbolTyper-jquery.0.1.1.min.js](symbolTyper-jquery.0.1.1.min.js).
 
 ##Pitch
 
-Sometimes when you write, you type textual symbols like :) or <3. Wouldn't it be nice to see those symbols rendered nicely as what they represent? By using the power of icon fonts symbolTyper will replace those patterns you defined with their symbols. Until now this was done only when rendering the text after it is sent or saved, it was done when the text is no longer editable. 
+Sometimes when you write, you type textual symbols like :) or <3. Wouldn't it be nice to see those symbols rendered nicely as what they represent? By using the power of icon fonts symbolTyper will replace those patterns you defined with their symbols. Until now this was done only when rendering the text after it is sent or saved, it was done when the text is no longer editable.
 
-With symbolTyper symbols appear as you type while you are editing the text, symbols become characters part of the text you are editing. And even better, symbolTyper counts the symbols that were typed so you can use that information when you render the text later. The symbols are no longer just decorative, you can also use them to convey information. 
+With symbolTyper symbols appear as you type while you are editing the text, symbols become characters part of the text you are editing. And even better, symbolTyper counts the symbols that were typed so you can use that information when you render the text later. The symbols are no longer just decorative, you can also use them to convey information.
 
 ##Demo
 
-All the demos : http://eloone.github.io/symbol-typer/demo/ 
+All the demos : http://eloone.github.io/symbol-typer/demo/
 
 Demo for the dependency free library : http://eloone.github.io/symbol-typer/demo/main-demo.html<br>
 Demo for the jQuery plugin : http://eloone.github.io/symbol-typer/demo/jquery-demo.html
@@ -23,9 +23,15 @@ Demo for the jQuery plugin : http://eloone.github.io/symbol-typer/demo/jquery-de
 Example use with AngularJs : <br>
 http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
+##Install
+
+To install the depency-free library:
+
+`bower install symbol-typer`
+
 ##Use
 
-Includes : 
+Includes :
 ```html
 	<!--include your icon font-->
 	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
@@ -38,7 +44,7 @@ HTML markup :
 <input type="text" id="typer1"/>
 ```
 
-Css : 
+Css :
 
 ```css
 input{
