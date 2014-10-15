@@ -95,7 +95,7 @@ For different settings view the [DOCUMENTATION](DOC.md).
 
 ##Requirements
 
-* You need to work with an icon font to enable symbol rendering. The demo for example uses FontAwesome.
+* You need to work with an icon font to enable symbol rendering. The demo for example uses [FontAwesome](http://fortawesome.github.io/Font-Awesome/).
 
 ##Browser support
 
@@ -104,7 +104,8 @@ HTML5 browsers and IE >= 9.
 ##Prototype
 
 This library is based on several hacks. If you are interested in understanding how it works under the hood you can study the prototype it is based on : <br>
-http://eloone.github.io/symbol-typer/demo/prototype.html 
+http://eloone.github.io/symbol-typer/demo/prototype.html <br>
+Also read the associated [article](http://machinesaredigging.com/2014/06/25/the-typing-symbol-hack/).
 
 ##Demo pages
 The demo pages are under the gh-pages branch. They were generated with [Assemble](http://assemble.io/).

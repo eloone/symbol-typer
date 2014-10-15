@@ -1,7 +1,7 @@
 #DOCUMENTATION
 
 Follow this documentation to implement symbolTyper with different options.<br>
-If you haven't already read first the [README](README.md#use) for the requirements and basics.
+If you haven't already, please read first the [README](README.md#use) for the requirements and basics.
 
 ##Dependency free implementation
 
