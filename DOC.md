@@ -39,7 +39,7 @@ If you don't use jQuery, symbolTyper is implemented like this:
 ```js 
 var typer = new symbolTyper(input, symbols, onTyped);
 ```
-For the jQuery implementation see <a href="#jquery-implementation">below</a>.
+For the jQuery implementation see <a href="#jquery-implementation">above</a>.
 
 ###Parameters
 
