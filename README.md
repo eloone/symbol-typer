@@ -1,35 +1,35 @@
 _I dedicate this script to the fans of the <a href="http://www.microsoft.com/typography/fonts/family.aspx?FID=16" target="_blank">Wingdings</a> font, something to reminisce about our childhood._
 ___
-#SYMBOL TYPER
+# SYMBOL TYPER
 
 symbolTyper is a javascript library that lets you type symbols by replacing patterns you define. <br>
 It exists as a standalone dependency free library [symbolTyper.0.1.1.js](symbolTyper.0.1.1.js) or [symbolTyper.0.1.1.min.js](symbolTyper.0.1.1.min.js) <br>or a jQuery plugin [symbolTyper-jquery.0.1.1.js](symbolTyper-jquery.0.1.1.js) or [symbolTyper-jquery.0.1.1.min.js](symbolTyper-jquery.0.1.1.min.js).
 
-##Pitch
+## Pitch
 
 Sometimes when you write, you type textual symbols like :) or <3. Wouldn't it be nice to see those symbols rendered nicely as what they represent? By using the power of icon fonts symbolTyper will replace those patterns you defined with their symbols. Until now this was done only when rendering the text after it is sent or saved, it was done when the text is no longer editable.
 
 With symbolTyper symbols appear as you type while you are editing the text, symbols become characters part of the text you are editing. And even better, symbolTyper counts the symbols that were typed so you can use that information when you render the text later. The symbols are no longer just decorative, you can also use them to convey information.
 
-##Demo
+## Demo
 
 All the demos : http://eloone.github.io/symbol-typer/demo/
 
 Demo for the dependency free library : http://eloone.github.io/symbol-typer/demo/main-demo.html<br>
 Demo for the jQuery plugin : http://eloone.github.io/symbol-typer/demo/jquery-demo.html
 
-##Example
+## Example
 
 Example use with AngularJs : <br>
 http://eloone.github.io/symbol-typer/demo/angular-demo.html
 
-##Install
+## Install
 
 To install the depency-free library:
 
 `bower install symbol-typer`
 
-##Use
+## Use
 
 Includes :
 ```html
@@ -92,28 +92,28 @@ function onTyped(status, event){
 
 For different settings view the [DOCUMENTATION](DOC.md).
 
-##Features
+## Features
 
 * Supports characters escape : `\<3` to not replace <3 by a heart
 * Counts the symbols : `typer.getStatus()` to get the count per symbol and text inside the editable element
 * Replaces several patterns : `replaced : [':-)', ':)']` for several patterns to replace or `replaced : '<3'` for a single pattern to replace
 * Limited symbols : `limit : 5` to limit the number of symbols that will appear to 5
 
-##Requirements
+## Requirements
 
 * You need to work with an icon font to enable symbol rendering. The demo for example uses [FontAwesome](http://fortawesome.github.io/Font-Awesome/).
 
-##Browser support
+## Browser support
 
 HTML5 browsers and IE >= 9.
 
-##Prototype
+## Prototype
 
 This library is based on several hacks. If you are interested in understanding how it works under the hood you can study the prototype it is based on : <br>
 http://eloone.github.io/symbol-typer/demo/prototype.html <br>
 Also read the associated [article](http://machinesaredigging.com/2014/06/25/the-typing-symbol-hack/).
 
-##Demo pages
+## Demo pages
 The demo pages are under the gh-pages branch. They were generated with [Assemble](http://assemble.io/).
 
 https://github.com/eloone/symbol-typer/tree/gh-pages/demo
