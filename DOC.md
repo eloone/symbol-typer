@@ -1,4 +1,4 @@
-#DOCUMENTATION
+# DOCUMENTATION
 
 Follow this documentation to implement symbolTyper with different options.<br>
 If you haven't already, please read first the [README](README.md#use) for the requirements and basics.
@@ -22,7 +22,7 @@ For full jQuery examples view :
 
 * http://eloone.github.io/symbol-typer/demo/jquery-demo.html
 
-##Dependency free implementation
+## Dependency free implementation
 
 Use [symbolTyper.0.1.1.js](symbolTyper.0.1.1.js) or [symbolTyper.0.1.1.min.js](symbolTyper.0.1.1.min.js)
 
@@ -41,7 +41,7 @@ var typer = new symbolTyper(input, symbols, onTyped);
 ```
 For the jQuery implementation see <a href="#jquery-implementation">above</a>.
 
-###Parameters
+### Parameters
 
 #### `input` : Required
 
